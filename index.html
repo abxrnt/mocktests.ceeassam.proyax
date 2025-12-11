@@ -59,9 +59,45 @@
     .seg button{flex:0 1 auto;padding:4px 8px;border-radius:8px;background:#fff5ec;border:1px solid rgba(255,220,180,0.5);font-weight:800;font-size:11px;cursor:pointer;min-width:0}
     .seg button.active{background:linear-gradient(90deg,#fff2ea,#fff4ed);border-color:#ffd8a8;color:var(--accent-dark);box-shadow:0 6px 12px rgba(249,115,22,0.05)}
     .picker{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--qgap);margin-top:8px;overflow:auto;max-height:calc(100% - 220px);padding-right:6px}
-    .qbtn{height:var(--qbtn);border-radius:6px;display:flex;align-items:center;justify-content:center;background:#fff6ec;border:1px solid rgba(255,220,180,0.7);font-weight:800;font-size:12px;cursor:pointer}
+    .qbtn{height:var(--qbtn);border-radius:6px;display:flex;align-items:center;justify-content:center;background:#fff6ec;border:1px solid rgba(255,220,180,0.7);font-weight:800;font-size:12px;cursor:pointer;position:relative;overflow:visible}
     .qbtn.answered{background:linear-gradient(90deg,#ecfdf5,#d1fae5);border-color:#bbf7d0;color:#0b9a6b}
     .qbtn.review{background:linear-gradient(90deg,#eef2ff,#e0e7ff);border-color:#c7d2fe;color:#2b6ee6}
+
+/* VIEWED state: non-filled but with small orange corner ribbon */
+/* This creates a triangular ribbon at top-left */
+    .qbtn.viewed{
+      background:#fff6ec;
+      border-color:rgba(255,200,150,0.8);
+      color: #111;
+    }
+    .qbtn.viewed::before{
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: -1px;
+      width: 0;
+      height: 0;
+      border-top: 20px solid var(--accent-dark);
+      border-right: 20px solid transparent;
+      border-left: 0;
+      transform-origin: 0 0;
+      border-bottom: 0;
+      z-index: 2;
+      border-top-left-radius: 4px;
+    }
+/* optional small white label inside triangle — will slightly overlay number; keep subtle */
+    .qbtn.viewed::after{
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 2px;
+      width: 6px;
+      height: 6px;
+      transform: rotate(45deg);
+      background: rgba(255,255,255,0.25);
+      z-index: 3;
+      border-radius: 1px;
+    }
 
     .legend{margin-top:10px;font-size:12px;color:#222}
     .legend .item{display:flex;gap:8px;align-items:center;margin-top:6px}
@@ -182,6 +218,34 @@
 .rules ul li { margin:6px 0; font-weight:700; font-size:13px; color:#111; }
 .rules .muted { font-weight:600; color:var(--muted); font-size:12.5px; margin-top:8px; display:block; }
 
+/* Confirmation modal styling */
+#confirm-submit-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8,10,12,0.45);
+  padding: 18px;
+}
+.confirm-card {
+  width: min(100%, 520px);
+  background: linear-gradient(180deg,#ffffff,#fffaf7);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255,245,235,0.95);
+  box-shadow: 0 30px 80px rgba(2,6,23,0.26);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.confirm-row { display:flex; justify-content:space-between; gap:8px; align-items:center; }
+.confirm-title { font-size:16px; font-weight:900; color:var(--accent-dark); }
+.confirm-stats { font-size:14px; color:#111; display:flex; gap:10px; flex-wrap:wrap; }
+.confirm-stat { background:linear-gradient(180deg,#fff6f0,#fff2ec); padding:8px 10px; border-radius:8px; font-weight:800; border:1px solid rgba(255,230,210,0.8); min-width:120px; text-align:center; }
+.confirm-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:4px; }
+
   </style>
 </head>
 <body>
@@ -258,6 +322,8 @@
 
       <div class="controls">
         <button class="btn-secondary" id="mark-review">Mark</button>
+        <!-- ADDED CLEAR BUTTON -->
+        <button class="btn-secondary" id="clear-btn">Clear</button>
         <button class="btn-secondary" id="prev-btn">Prev</button>
         <button class="btn-primary" id="next-btn">Next</button>
         <button class="btn-danger" id="submit-btn">Submit</button>
@@ -276,7 +342,7 @@
 
       <div class="legend">
         <div style="font-weight:700;margin-top:6px">Legend</div>
-        <div class="item"><span class="sw" style="background:#fff3e0;border:1px solid #ffe4cf"></span> Unseen</div>
+        <div class="item"><span class="sw" style="background:#fff3e0;border:1px solid #ffe4cf"></span> Unseen / viewed</div>
         <div class="item"><span class="sw" style="background:#ecfdf5;border:1px solid #bbf7d0"></span> Answered</div>
         <div class="item"><span class="sw" style="background:#eef2ff;border:1px solid #c7d2fe"></span> Marked</div>
       </div>
@@ -370,6 +436,28 @@
     </div>
   </div>
 
+  <!-- Confirmation modal for submit -->
+  <div id="confirm-submit-modal" role="dialog" aria-modal="true">
+    <div class="confirm-card" role="document">
+      <div class="confirm-row">
+        <div class="confirm-title">Confirm submission</div>
+        <div style="font-size:12px;color:var(--muted)">Make sure you've reviewed your answers</div>
+      </div>
+      <div class="confirm-stats" id="confirm-stats">
+        <div class="confirm-stat" id="confirm-attempted">Attempted: 0</div>
+        <div class="confirm-stat" id="confirm-left">Left: 0</div>
+        <div class="confirm-stat" id="confirm-remaining">Time left: 00:00:00</div>
+      </div>
+
+      <div style="font-size:13px;color:var(--muted);">If you proceed, your attempt will be submitted and saved. Reattempts are not permitted for this mock.</div>
+
+      <div class="confirm-actions">
+        <button id="confirm-submit-no" class="btn-secondary">Cancel</button>
+        <button id="confirm-submit-yes" class="btn-danger">Confirm submit</button>
+      </div>
+    </div>
+  </div>
+
   <!-- FULLSCREEN LOGIN (no demo) -->
   <div id="login-screen" class="login-screen" role="dialog" aria-modal="true">
     <div class="px-login-fullscreen">
@@ -453,6 +541,8 @@
     const prevBtn = document.getElementById('prev-btn');
     const markReviewBtn = document.getElementById('mark-review');
     const submitBtn = document.getElementById('submit-btn');
+    // CLEAR button ref
+    const clearBtn = document.getElementById('clear-btn');
 
     const resultsBtn = document.getElementById('results-btn');
     const logoutBtn = document.getElementById('logout-btn');
@@ -464,6 +554,14 @@
     const detailOverlay = document.getElementById('detail-overlay');
     const closeDetail = document.getElementById('close-detail');
 
+    // Confirm modal refs
+    const confirmModal = document.getElementById('confirm-submit-modal');
+    const confirmAttempted = document.getElementById('confirm-attempted');
+    const confirmLeft = document.getElementById('confirm-left');
+    const confirmRemaining = document.getElementById('confirm-remaining');
+    const confirmYes = document.getElementById('confirm-submit-yes');
+    const confirmNo = document.getElementById('confirm-submit-no');
+
     // state
     let questions = [];
     let responses = [];
@@ -472,11 +570,13 @@
     let startTime = null;
     let globalTimerInterval = null;
     let testStarted = false;
-    let autoSubmitTimer = null;
+    let autoSubmitTimer = null; // kept for compatibility (not used for countdown auto-submit)
     let submittedAlready = false;
     let currentUser = null;
     let mocksList = [];
     let currentMockId = null;
+    let sectionMap = null;
+    let totalDurationSec = 0; // <-- total test duration in seconds (used for countdown)
 
     // utilities
     function fmtH(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
@@ -519,6 +619,8 @@
       return out;
     }
 
+    function escapeHtml(str){ if(!str) return ''; return String(str).replace(/[&<>"']/g, function(m){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]; }); }
+
     // UI init
     appEl.setAttribute('aria-hidden','true');
     loginScreen.style.display = 'flex';
@@ -526,6 +628,7 @@
     userBadge.style.display = 'none';
     userNameEl.textContent = 'Not signed in';
     userAvatarEl.textContent = 'P';
+    globalTimer.textContent = '00:00:00';
 
     // login (no guest/demo option)
     loginBtn.addEventListener('click', async ()=>{
@@ -564,10 +667,12 @@
       userBadge.style.display = 'none';
       userNameEl.textContent = 'Not signed in';
       userAvatarEl.textContent = 'P';
-      openStart.style.display='inline-block'; resultsBtn.style.display='none'; openStart.style.display='none'; logoutBtn.style.display='none';
+      openStart.style.display = 'inline-block'; resultsBtn.style.display='none'; openStart.style.display='none'; logoutBtn.style.display='none';
       testStarted=false; submittedAlready=false; if(autoSubmitTimer) clearTimeout(autoSubmitTimer);
       stopGlobalTimer();
-      questions=sampleBank(); responses=questions.map(()=>({choiceIndex:null,marked:false,timeUsed:0})); questionTimers=questions.map(()=>null); current=0; renderQuestion(); renderPicker('Physics');
+      totalDurationSec = 0;
+      globalTimer.textContent = '00:00:00';
+      questions=sampleBank(); responses=questions.map(()=>({choiceIndex:null,marked:false,timeUsed:0,viewed:false})); questionTimers=questions.map(()=>null); current=0; renderQuestion(); renderPicker('Physics');
       loginScreen.style.display='flex';
       appEl.setAttribute('aria-hidden','true');
       currentMockId = null;
@@ -683,9 +788,13 @@
 
       if(db){
         try{
-          const sub = await db.collection('mocks').doc(mock.id).collection('questions').get().catch(()=>({docs:[]})); fetched = sub.docs.map(d=>({id:d.id,...d.data()}));
+          // <-- IMPORTANT: fetch questions ordered by index to preserve admin order
+          const sub = await db.collection('mocks').doc(mock.id).collection('questions').orderBy('index').get().catch(()=>({docs:[]})); 
+          fetched = sub.docs.map(d=>({id:d.id,...d.data()}));
           if(!fetched.length){
-            const q2snap = await db.collection('questions').where('mockId','==',mock.id).get().catch(()=>({docs:[]})); fetched = q2snap.docs.map(d=>({id:d.id,...d.data()}));
+            // fallback to older flattened approach
+            const q2snap = await db.collection('questions').where('mockId','==',mock.id).orderBy('index').get().catch(()=>({docs:[]})); 
+            fetched = q2snap.docs.map(d=>({id:d.id,...d.data()}));
           }
         }catch(e){ console.warn(e); }
       }
@@ -730,11 +839,12 @@
 
       let built = [];
       if(fetched.length){
+        // safer mapping: prefer explicit section/qid/index
         built = fetched.map((q,i)=>( {
           id: q.id || ('Q'+i),
-          section: q.section || (i<20?'Physics':(i<40?'Chemistry':'Mathematics')),
+          section: (q.section) ? q.section : (q.qid ? (String(q.qid)[0].toUpperCase()==='P' ? 'Physics' : (String(q.qid)[0].toUpperCase()==='C' ? 'Chemistry' : (String(q.qid)[0].toUpperCase()==='M' ? 'Mathematics' : null))) : null),
           text: q.text || q.question || null,
-          img: findImageFromDoc(q),
+          img: findImageFromDoc(q) || normalizeImgUrl(q.imageUrl || q.img || q.image) || null,
           options: q.options || ['A','B','C','D'],
           answerIndex: (typeof q.answerIndex === 'number' ? q.answerIndex : letterToIndex(q.answer || q.ans || q.correct))
         } ));
@@ -753,10 +863,37 @@
         answerIndex: (typeof q.answerIndex === 'number' ? q.answerIndex : letterToIndex(q.answerIndex || q.correct || q.ans))
       } ));
 
-      responses = questions.map(()=>({choiceIndex:null,markedReview:false,timeSpentSec:0}));
+      /* === SECTION MAP ===
+         Build a map of which question indices belong to each section.
+         This removes the fragile assumption that sections are equal thirds.
+      */
+      function buildSectionMap(){
+        const map = {};
+        for(let i=0;i<questions.length;i++){
+          const s = questions[i].section || 'Unknown';
+          if(!map[s]) map[s]=[];
+          map[s].push(i);
+        }
+        // prefer canonical ordering
+        const preferred = ['Physics','Chemistry','Mathematics'];
+        const ordered = {};
+        preferred.forEach(p=>{ if(map[p]) ordered[p]=map[p]; });
+        Object.keys(map).forEach(k=>{ if(!ordered[k]) ordered[k]=map[k]; });
+        return ordered;
+      }
+
+      // store the map globally (so other functions can use it)
+      sectionMap = buildSectionMap();
+
+      // init responses/timers/state — include viewed flag
+      responses = questions.map(()=>({choiceIndex:null,markedReview:false,timeSpentSec:0, viewed:false}));
       questionTimers = questions.map(()=>null);
       current = 0;
+      // duration handling: set totalDurationSec for countdown
+      const durationMinutes = Number(mock.duration || mock.time) || 120;
+      totalDurationSec = Math.max(0, Math.floor(durationMinutes * 60));
       startTime = Date.now(); testStarted = true; submittedAlready=false;
+      // start countdown-based global timer
       startGlobalTimer();
       renderQuestion();
       setActiveSection('Physics');
@@ -765,18 +902,57 @@
       currentMockId = mock.id || null;
       openStart.style.display = 'none';
 
-      const duration = Number(mock.duration || mock.time) || 120;
-      if(autoSubmitTimer) clearTimeout(autoSubmitTimer);
-      autoSubmitTimer = setTimeout(()=>{ alert('Time up — auto-submit'); submitTest(true); }, duration*60*1000);
+      // no longer using setTimeout autoSubmitTimer; countdown triggers submit when it reaches 0
+      if(autoSubmitTimer){ clearTimeout(autoSubmitTimer); autoSubmitTimer = null; }
     }
 
     /* ========== render / timers ========== */
-    function startGlobalTimer(){ if(globalTimerInterval) clearInterval(globalTimerInterval); globalTimerInterval = setInterval(()=>{ if(!startTime) return; const s=Math.floor((Date.now()-startTime)/1000); globalTimer.textContent = fmtH(s); },500); }
-    function stopGlobalTimer(){ if(globalTimerInterval) clearInterval(globalTimerInterval); }
+    function startGlobalTimer(){
+      if(globalTimerInterval) clearInterval(globalTimerInterval);
+      // immediately update display
+      function updateOnce(){
+        if(!startTime || typeof totalDurationSec !== 'number' || totalDurationSec <= 0){
+          globalTimer.textContent = '00:00:00';
+          return;
+        }
+        const elapsed = Math.floor((Date.now() - startTime)/1000);
+        let remaining = totalDurationSec - elapsed;
+        if(remaining < 0) remaining = 0;
+        globalTimer.textContent = fmtH(remaining);
+        if(remaining <= 0){
+          // stop timer, auto submit
+          clearInterval(globalTimerInterval);
+          globalTimerInterval = null;
+          // ensure we only auto-submit once
+          if(!submittedAlready){
+            submitTest(true).catch(()=>{ /* ignore */ });
+          }
+        }
+      }
+      updateOnce();
+      globalTimerInterval = setInterval(updateOnce, 500);
+    }
+    function stopGlobalTimer(){ if(globalTimerInterval) { clearInterval(globalTimerInterval); globalTimerInterval = null; } }
 
-    function getSectionOfIndex(idx){ const per = Math.ceil( (questions.length/3) ); if(idx<per) return 'Physics'; if(idx<per*2) return 'Chemistry'; return 'Mathematics'; }
-    function getNumberWithinSection(idx){ const per = Math.ceil( (questions.length/3) ); if(idx<per) return idx+1; if(idx<per*2) return idx-per+1; return idx-per*2+1; }
-    function getGlobalIndex(section,num){ const per = Math.ceil( (questions.length/3) ); if(section==='Physics') return num-1; if(section==='Chemistry') return per+(num-1); return per*2+(num-1); }
+    // Helper functions that now use sectionMap
+    function getSectionOfIndex(idx){ return (questions[idx] && questions[idx].section) ? questions[idx].section : null; }
+
+    function getNumberWithinSection(idx){
+      const sec = getSectionOfIndex(idx);
+      if(!sec || !sectionMap || !sectionMap[sec]) return null;
+      return sectionMap[sec].indexOf(idx) + 1; // 1-based
+    }
+
+    function getGlobalIndex(section,num){
+      if(!sectionMap || !sectionMap[section]) return null;
+      if(num-1 < 0 || num-1 >= sectionMap[section].length) return null;
+      return sectionMap[section][num-1];
+    }
+
+    function firstIndexOfSection(section){
+      if(!sectionMap || !sectionMap[section] || sectionMap[section].length===0) return 0;
+      return sectionMap[section][0];
+    }
 
     function renderQuestion(){
       // If test not started -> show rules block (same content as initial HTML)
@@ -811,8 +987,11 @@
         return;
       }
 
+      // mark current as viewed when rendering it
+      if(responses[current]) responses[current].viewed = true;
+
       const q = questions[current];
-      qno.textContent = `${q.section} • Q ${getNumberWithinSection(current)}`;
+      qno.textContent = `${q.section} • Q ${getNumberWithinSection(current) || 1}`;
 
       optionsEl.innerHTML = '';
       questionEl.innerHTML = '';
@@ -864,24 +1043,43 @@
 
     function renderPicker(section){
       const picker = document.getElementById('section-picker'); picker.innerHTML = '';
-      const per = Math.ceil(questions.length / 3);
-      for(let i=1;i<=per;i++){
-        const idx = getGlobalIndex(section,i);
-        if(idx>=questions.length) break;
-        const st = responses[idx];
-        const el = document.createElement('div'); el.className='qbtn ' + (st.markedReview? 'review' : (st.choiceIndex===null? '':'answered'));
-        el.textContent = i;
-        el.addEventListener('click', ()=>{ recordQuestionTimeStop(current); current = idx; renderQuestion(); renderPicker(section); });
+      const list = (sectionMap && sectionMap[section]) ? sectionMap[section] : [];
+      for(let i=0;i<list.length;i++){
+        const idx = list[i];
+        if(idx===undefined) continue;
+        const st = responses[idx] || { choiceIndex:null, markedReview:false, viewed:false };
+        // priority: marked -> answered -> viewed -> default
+        let cls = 'qbtn';
+        if(st.markedReview) cls += ' review';
+        else if(st.choiceIndex !== null) cls += ' answered';
+        else if(st.viewed) cls += ' viewed';
+
+        const el = document.createElement('div'); el.className = cls;
+        el.textContent = i+1;
+        el.title = `Q ${i+1}`;
+        el.addEventListener('click', ()=>{ 
+          // stop time for previous
+          if(testStarted) recordQuestionTimeStop(current);
+          // set current and mark viewed immediately so UI shows ribbon even before renderQuestion sets it
+          current = idx; 
+          if(responses[current]) responses[current].viewed = true;
+          renderQuestion(); 
+          renderPicker(section); 
+          // resume timer
+          if(testStarted) recordQuestionTimeStart(current);
+        });
         picker.appendChild(el);
       }
     }
 
     function firstIndexOfSection(section){
-      const per = Math.ceil(questions.length / 3);
-      if(section === 'Physics') return 0;
-      if(section === 'Chemistry') return per;
-      return per * 2;
+      if(!sectionMap || !sectionMap[section] || sectionMap[section].length===0) return 0;
+      return sectionMap[section][0];
     }
+
+    document.getElementById('btn-phy').addEventListener('click', ()=> setActiveSection('Physics'));
+    document.getElementById('btn-chem').addEventListener('click', ()=> setActiveSection('Chemistry'));
+    document.getElementById('btn-math').addEventListener('click', ()=> setActiveSection('Mathematics'));
 
     function setActiveSection(section){
       document.getElementById('btn-phy').classList.toggle('active', section === 'Physics');
@@ -897,25 +1095,65 @@
         current = idx;
       }
 
+      // mark viewed when switching into section (we render question which sets viewed)
       renderQuestion();
       renderPicker(section);
     }
-
-    document.getElementById('btn-phy').addEventListener('click', ()=> setActiveSection('Physics'));
-    document.getElementById('btn-chem').addEventListener('click', ()=> setActiveSection('Chemistry'));
-    document.getElementById('btn-math').addEventListener('click', ()=> setActiveSection('Mathematics'));
 
     nextBtn.addEventListener('click', ()=>{ if(!testStarted) return; recordQuestionTimeStop(current); current = Math.min(questions.length-1,current+1); renderQuestion(); renderPicker(getSectionOfIndex(current)); });
     prevBtn.addEventListener('click', ()=>{ if(!testStarted) return; recordQuestionTimeStop(current); current = Math.max(0,current-1); renderQuestion(); renderPicker(getSectionOfIndex(current)); });
     markReviewBtn.addEventListener('click', ()=>{ if(!testStarted) return; responses[current].markedReview = !responses[current].markedReview; renderQuestion(); renderPicker(getSectionOfIndex(current)); });
 
+    // CLEAR button behaviour: deselect current option and remove mark
+    clearBtn.addEventListener('click', ()=> {
+      if(!testStarted) return;
+      // stop current timer (we keep time already spent)
+      recordQuestionTimeStop(current);
+      // clear selection and unmark
+      responses[current].choiceIndex = null;
+      responses[current].markedReview = false;
+      // update UI
+      renderQuestion();
+      renderPicker(getSectionOfIndex(current));
+      // resume timing for this question
+      recordQuestionTimeStart(current);
+    });
+
     function recordQuestionTimeStart(idx){ if(!questionTimers[idx]) questionTimers[idx]=Date.now(); }
     function recordQuestionTimeStop(idx){ if(questionTimers[idx]){ const delta = Math.floor((Date.now()-questionTimers[idx])/1000); responses[idx].timeSpentSec = (responses[idx].timeSpentSec||0) + delta; questionTimers[idx]=null; qtime.textContent = 'Time spent: ' + fmtMS(responses[idx].timeSpentSec||0); } }
 
-    submitBtn.addEventListener('click', async ()=>{
+    // Updated Submit behavior: show confirmation modal with stats
+    submitBtn.addEventListener('click', (e)=>{
+      e.preventDefault();
       if(!testStarted || submittedAlready) return;
+      showSubmitConfirm();
+    });
+
+    function showSubmitConfirm(){
+      if(!testStarted || submittedAlready) return;
+      const attempted = responses.filter(r => r.choiceIndex !== null).length;
+      const left = responses.length - attempted;
+      let remaining = 0;
+      if(startTime && typeof totalDurationSec === 'number'){
+        const elapsed = Math.floor((Date.now() - startTime)/1000);
+        remaining = Math.max(0, totalDurationSec - elapsed);
+      }
+      confirmAttempted.textContent = `Attempted: ${attempted}`;
+      confirmLeft.textContent = `Left: ${left}`;
+      confirmRemaining.textContent = `Time left: ${fmtH(remaining)}`;
+      confirmModal.style.display = 'flex';
+    }
+
+    confirmNo.addEventListener('click', ()=>{ confirmModal.style.display = 'none'; });
+    // Confirm yes -> proceed to submit. If there are marked questions, warn first in modal flow.
+    confirmYes.addEventListener('click', async ()=>{
+      confirmModal.style.display = 'none';
+      if(!testStarted || submittedAlready) return;
+      // if there are any marked questions, confirm again (small inline check)
       const marked = responses.map((r,i)=> r.markedReview? i:-1).filter(x=>x>=0);
-      if(marked.length){ if(!confirm(`You have ${marked.length} marked. Submit anyway?`)) return; }
+      if(marked.length){
+        if(!confirm(`You have ${marked.length} marked. Submit anyway?`)) return;
+      }
       await submitTest();
     });
 
@@ -924,6 +1162,8 @@
       submittedAlready = true;
       questionTimers.forEach((t,i)=>{ if(t) recordQuestionTimeStop(i); });
       stopGlobalTimer();
+      totalDurationSec = 0;
+      globalTimer.textContent = '00:00:00';
       const { total, per } = computeScore();
 
       const result = {
@@ -934,12 +1174,22 @@
         date: (firebase && firebase.firestore)? firebase.firestore.FieldValue.serverTimestamp() : new Date().toISOString(),
         durationSec: Math.floor((Date.now()-startTime)/1000),
         autoSubmitted: !!isAuto,
-        perQuestion: questions.map((q,i)=>({ qid:q.id, section:q.section, selectedIndex: responses[i].choiceIndex, correctIndex: q.answerIndex, score: per[i], timeUsedSec: responses[i].timeSpentSec, markedReview: responses[i].markedReview }))
+        perQuestion: questions.map((q,i)=>( {
+          qid: q.id,
+          qidNormalized: (q.qid || q.id || '').toString(),
+          section: q.section,
+          imageUrl: q.img || q.imageUrl || q.imgUrl || null,
+          selectedIndex: responses[i].choiceIndex,
+          correctIndex: q.answerIndex,
+          score: per[i],
+          timeUsedSec: responses[i].timeSpentSec,
+          markedReview: responses[i].markedReview
+        } ))
       };
 
       if(db){ try{ await db.collection('res').add(result); }catch(e){ console.warn('save failed',e); } } else { console.log('would save',result); }
 
-      responses = questions.map(()=>({choiceIndex:null,markedReview:false,timeSpentSec:0}));
+      responses = questions.map(()=>({choiceIndex:null,markedReview:false,timeSpentSec:0,viewed:false}));
       questionTimers = questions.map(()=>null);
       current=0; submittedAlready=false; testStarted=false; startTime=null; if(autoSubmitTimer) clearTimeout(autoSubmitTimer);
       renderQuestion(); renderPicker(getSectionOfIndex(current));
@@ -983,18 +1233,22 @@
     });
     closeHistory.addEventListener('click', ()=> historyOverlay.style.display='none');
 
-    function showDetailFromDoc(doc){
+    // robust showDetailFromDoc — checks saved image first, then runtime questions[], then Firestore fallback
+    async function showDetailFromDoc(doc){
+      // doc may be a firestore doc snapshot or a plain object
       const d = doc && doc.data ? doc.data() : (doc || {});
       document.getElementById('detail-title').textContent = `Submission — ${d.name||d.username||'User'}`;
       const savedText = d.date ? (d.date.toDate ? d.date.toDate().toLocaleString() : d.date) : '-';
       document.getElementById('detail-sub').textContent = `Saved: ${savedText}`;
+
       const scoreBadge = document.getElementById('detail-score');
       if(scoreBadge){
         const big = scoreBadge.querySelector('.big');
         if(big) big.textContent = d.score || 0;
       }
 
-      const totalQs = (d.perQuestion || []).length;
+      const perQ = d.perQuestion || [];
+      const totalQs = perQ.length;
       const maxScore = totalQs * 4;
       document.getElementById('right-total').textContent = d.score || 0;
       document.getElementById('right-max').textContent = maxScore;
@@ -1006,20 +1260,85 @@
         return '-';
       })();
 
+      // Compute overall correct/wrong/unanswered and subject-wise marks
       let correct = 0, wrong = 0, unanswered = 0;
-      (d.perQuestion || []).forEach(pq => {
-        if(pq.selectedIndex == null) unanswered++;
-        else if(pq.selectedIndex === pq.correctIndex) correct++;
-        else wrong++;
+      const subj = {}; // subj -> { correct, wrong, unanswered, positive, negative }
+      perQ.forEach(pq => {
+        const section = (pq.section || 'Unknown');
+        if(!subj[section]) subj[section] = { correct:0, wrong:0, unanswered:0, positive:0, negative:0, net:0 };
+        if(pq.selectedIndex == null){
+          unanswered++;
+          subj[section].unanswered++;
+        } else if(pq.correctIndex != null && pq.selectedIndex === pq.correctIndex){
+          correct++;
+          subj[section].correct++;
+          subj[section].positive += 4;
+        } else {
+          wrong++;
+          subj[section].wrong++;
+          subj[section].negative += 1;
+        }
       });
+
+      // compute net for each subject and overall
+      let overallPositive = 0, overallNegative = 0;
+      Object.keys(subj).forEach(k => { subj[k].net = subj[k].positive - subj[k].negative; overallPositive += subj[k].positive; overallNegative += subj[k].negative; });
+
       document.getElementById('stat-correct').textContent = correct;
       document.getElementById('stat-wrong').textContent = wrong;
       document.getElementById('stat-unanswered').textContent = unanswered;
 
+      // Update the progress bar as before
       const percent = totalQs ? Math.round(((correct + wrong) / totalQs) * 100) : 0;
       const pb = document.getElementById('progress-bar');
       if(pb) pb.style.width = `${percent}%`;
 
+      // Remove old breakdown if present
+      let existingBreakdown = document.getElementById('subject-breakdown');
+      if(existingBreakdown) existingBreakdown.remove();
+
+      const leftCol = document.querySelector('.detail-left');
+      if(leftCol){
+        const breakdown = document.createElement('div');
+        breakdown.id = 'subject-breakdown';
+        breakdown.style.display = 'flex';
+        breakdown.style.gap = '8px';
+        breakdown.style.flexWrap = 'wrap';
+        breakdown.style.marginTop = '10px';
+        breakdown.style.alignItems = 'center';
+
+        // overall summary
+        const overallDiv = document.createElement('div');
+        overallDiv.className = 'stat';
+        overallDiv.style.minWidth = '160px';
+        overallDiv.innerHTML = `<strong style="font-size:16px">${(overallPositive - overallNegative) || 0}</strong><span style="font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')}">Overall (net)</span>
+        <div style="margin-top:6px;font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')}">+${overallPositive} / -${overallNegative}</div>`;
+        breakdown.appendChild(overallDiv);
+
+        // per-subject cards (Physics, Chemistry, Mathematics kept in same order if present)
+        const prefer = ['Physics','Chemistry','Mathematics'];
+        const keys = [...prefer.filter(k=>subj[k]), ...Object.keys(subj).filter(k=>!prefer.includes(k))];
+
+        keys.forEach(k => {
+          const s = subj[k];
+          const card = document.createElement('div');
+          card.className = 'stat';
+          card.style.minWidth = '140px';
+          card.innerHTML = `<strong style="font-size:15px">${s.net}</strong><span style="font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')}">${escapeHtml(k)}</span>
+            <div style="margin-top:6px;font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')}">+${s.positive} / -${s.negative}</div>`;
+          breakdown.appendChild(card);
+        });
+
+        // insert the breakdown after the stats-row element
+        const statsRow = leftCol.querySelector('.stats-row');
+        if(statsRow && statsRow.parentNode){
+          statsRow.parentNode.insertBefore(breakdown, statsRow.nextSibling);
+        } else {
+          leftCol.insertBefore(breakdown, leftCol.firstChild);
+        }
+      }
+
+      // Build per-question list and attach Preview (eye) button
       const list = document.getElementById('perq-list');
       list.innerHTML = '';
       (d.perQuestion || []).forEach((pq, i) => {
@@ -1050,6 +1369,59 @@
         const scoreSpan = document.createElement('div');
         scoreSpan.textContent = `Score: ${pq.score||0}`;
 
+        // preview button (eye SVG)
+        const viewBtn = document.createElement('button');
+        viewBtn.className = 'btn secondary';
+        viewBtn.style.marginLeft = '8px';
+        viewBtn.title = 'View question image';
+        viewBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg> View
+        `;
+        // on click: try to find image and open preview window
+        viewBtn.addEventListener('click', async ()=>{
+          const qidVal = pq.qid || pq.qidNormalized || '';
+          // 1) check image embedded in the saved attempt (best)
+          let imgUrl = pq.imageUrl || pq.img || pq.image || null;
+
+          // 2) fallback: try to find it in current runtime questions[]
+          if(!imgUrl && Array.isArray(questions) && questions.length){
+            try {
+              const found = questions.find(q => (String(q.id) === String(qidVal) || String(q.qid || '') === String(qidVal)));
+              if(found) imgUrl = found.img || found.imageUrl || found.imgUrl || null;
+            } catch(e){}
+          }
+
+          // 3) fallback: try to fetch question doc from Firestore (if mockId available)
+          if(!imgUrl && db && d.mockId){
+            try {
+              const qSnap = await db.collection('mocks').doc(d.mockId).collection('questions')
+                .where('qid','==', qidVal).limit(1).get().catch(()=>({docs:[]}));
+              if(qSnap && qSnap.docs && qSnap.docs.length){
+                const qdoc = qSnap.docs[0].data();
+                imgUrl = qdoc.imageUrl || qdoc.img || qdoc.image || findImageFromDoc(qdoc) || null;
+              }
+            } catch(e){
+              console.warn('failed to fetch question doc for preview', e);
+            }
+          }
+
+          // show preview (open window)
+          const w = window.open('','_blank','width=900,height=700');
+          if(!w){ alert('Popup blocked — allow popups to preview images'); return; }
+          if(imgUrl){
+            w.document.title = 'Question Preview - ' + qidVal;
+            w.document.body.style.margin = '0';
+            w.document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#fff;padding:12px"><img src="${escapeHtml(imgUrl)}" style="max-width:100%;max-height:100%;object-fit:contain" alt="${escapeHtml(qidVal)}" /></div>`;
+          } else {
+            w.document.title = 'Preview - Not available';
+            w.document.body.style.margin = '0';
+            w.document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#fff;padding:12px;color:#b37b4a;font-weight:800">No image available for ${escapeHtml(qidVal)}</div>`;
+          }
+        });
+
         const badge = document.createElement('div');
         badge.className = 'badge';
         if(pq.selectedIndex == null) { badge.classList.add('unseen'); badge.textContent = 'Unanswered'; }
@@ -1064,10 +1436,20 @@
 
         tr.appendChild(left);
         tr.appendChild(mid);
-        tr.appendChild(badge);
+
+        // actions column: badge + view button
+        const actionsWrap = document.createElement('div');
+        actionsWrap.style.display = 'flex';
+        actionsWrap.style.gap = '8px';
+        actionsWrap.style.alignItems = 'center';
+        actionsWrap.appendChild(badge);
+        actionsWrap.appendChild(viewBtn);
+
+        tr.appendChild(actionsWrap);
         list.appendChild(tr);
       });
 
+      // show the modal
       detailOverlay.style.display = 'flex';
       const closeTop = document.getElementById('close-detail');
       if(closeTop) closeTop.onclick = () => { detailOverlay.style.display = 'none'; };
@@ -1078,8 +1460,24 @@
     closeDetail.addEventListener('click', ()=> detailOverlay.style.display='none');
 
     /* ========== init ========== */
+    // initial fallback sample
     questions = sampleBank();
-    responses = questions.map(()=>({choiceIndex:null,markedReview:false,timeSpentSec:0}));
+    // Build an initial sectionMap from sampleBank
+    (function buildInitialSectionMap(){
+      const map = {};
+      for(let i=0;i<questions.length;i++){
+        const s = questions[i].section || 'Unknown';
+        if(!map[s]) map[s]=[];
+        map[s].push(i);
+      }
+      const preferred = ['Physics','Chemistry','Mathematics'];
+      const ordered = {};
+      preferred.forEach(p=>{ if(map[p]) ordered[p]=map[p]; });
+      Object.keys(map).forEach(k=>{ if(!ordered[k]) ordered[k]=map[k]; });
+      sectionMap = ordered;
+    })();
+
+    responses = questions.map(()=>({choiceIndex:null,markedReview:false,timeSpentSec:0,viewed:false}));
     questionTimers = questions.map(()=>null);
     current = 0;
     renderQuestion();
