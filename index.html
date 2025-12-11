@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PROYAX — CEE Mock Test (Compact)</title>
+  <title>CEE Mock Test - PROYAX</title>
   <link rel="icon" href="favicon.png" />
 
   <style>
@@ -136,6 +136,52 @@
     .badge.unseen { background:linear-gradient(90deg,#fffaf0,#fff6ec); color:#b37b4a; border-color:#ffe4cf; }
 
     @media (max-width:900px){ .side{display:none} .app{padding:6px} }
+.user-badge{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#fff6ed,#fff2e7);
+  border:1px solid rgba(255,220,190,0.7);
+  box-shadow:0 6px 16px rgba(15,23,42,0.06);
+}
+
+.avatar{
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#ffedd5,#ffc999);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  color:#9a4b11;
+  font-size:14px;
+  border:1px solid rgba(0,0,0,0.05);
+}
+
+.user-name{
+  font-weight:800;
+  font-size:13px;
+  color:var(--accent-dark);
+  max-width:120px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.rules {
+  text-align:left;
+  max-width:760px;
+  line-height:1.4;
+  color:#0f172a;
+}
+.rules h3 { margin:0 0 6px 0; font-size:15px; color:var(--accent-dark); }
+.rules ul { margin:6px 0 0 18px; padding:0; }
+.rules ul li { margin:6px 0; font-weight:700; font-size:13px; color:#111; }
+.rules .muted { font-weight:600; color:var(--muted); font-size:12.5px; margin-top:8px; display:block; }
+
   </style>
 </head>
 <body>
@@ -147,18 +193,31 @@
           <img src="favicon.png" alt="logo" />
           <div>
             <div class="title">PROYAX — CEE Mock Test</div>
-            <div class="subtitle">Light theme • Orange accents</div>
+            <div class="subtitle">Secure your seat with practice-driven mock tests</div>
           </div>
         </div>
 
-        <div class="meta">
-          <div class="timer" id="global-timer">00:00:00</div>
-          <div id="user-info" class="meta-sm" style="min-width:80px;text-align:left">Not signed in</div>
-          <button id="results-btn" class="btn-secondary" style="display:none">Results</button>
-          <button id="open-login" class="btn-primary" style="display:none">Login</button>
-          <button id="logout-btn" class="btn-secondary" style="display:none">Logout</button>
-          <button id="open-start" class="btn-primary" style="display:none">Start</button>
-        </div>
+        <div class="meta" style="align-items:center;gap:12px">
+
+  <!-- TIME REMAINING -->
+  <div style="display:flex;align-items:center;gap:6px;font-weight:800;font-size:12px;color:var(--accent-dark)">
+    <span style="color:var(--muted);font-weight:800;">Time Remaining:</span>
+    <div class="timer" id="global-timer">00:00:00</div>
+  </div>
+
+  <!-- ATTRACTIVE USER BADGE -->
+  <div id="user-badge" class="user-badge" style="display:none">
+    <div id="user-avatar" class="avatar">U</div>
+    <div id="user-name" class="user-name">User</div>
+  </div>
+
+  <button id="results-btn" class="btn-secondary" style="display:none">Results</button>
+  <button id="open-login" class="btn-primary" style="display:none">Login</button>
+  <button id="logout-btn" class="btn-secondary" style="display:none">Logout</button>
+  <button id="open-start" class="btn-primary" style="display:none">Start</button>
+
+</div>
+
       </div>
 
       <div class="question-card" id="question-card">
@@ -170,7 +229,29 @@
           <div class="meta-sm" id="qstatus">Status: Unseen</div>
         </div>
 
-        <div class="question" id="question">Click <strong>Start</strong> to begin</div>
+        <!-- SHOW RULES & DASHBOARD HELP BEFORE START -->
+        <div class="question" id="question">
+          <div class="rules" id="rules-block">
+            <h3>Rules</h3>
+            <ul>
+              <li>+4 for a correct answer</li>
+              <li>-1 for a wrong answer</li>
+              <li>0 for unanswered questions</li>
+              <li>Only one attempt allowed per mock — reattempts are not permitted</li>
+              <li>Use <strong>Mark</strong> to flag questions for review and submit when done</li>
+            </ul>
+
+            <h3 style="margin-top:10px">Dashboard — quick guide</h3>
+            <ul>
+              <li>Timer (top-right): shows elapsed time for your current attempt.</li>
+              <li>Question palette (right): jump to any question in the section; colored badges show answered/marked status.</li>
+              <li>Controls (bottom): <strong>Prev/Next</strong> to navigate, <strong>Mark</strong> to flag, and <strong>Submit</strong> to finish.</li>
+              <li>Results: after submission you can view per-question outcome, time used and summary analytics in the "Results" window.</li>
+            </ul>
+
+            <div class="muted">When you're ready, click <strong>Start</strong> to begin the mock. Good luck!</div>
+          </div>
+        </div>
 
         <div class="options" id="options"></div>
       </div>
@@ -282,8 +363,6 @@
           </div>
 
           <div style="margin-top:auto">
-            <button id="export-csv" class="btn-primary" style="width:100%">Export CSV</button>
-            <div style="height:8px"></div>
             <button id="close-detail-bottom" class="btn-secondary" style="width:100%">Close</button>
           </div>
         </div>
@@ -303,7 +382,7 @@
         <div class="px-login-formwrap">
           <div class="px-login-column">
             <div style="display:flex;align-items:flex-start;gap:12px;">
-              <div style="font-weight:900;font-size:18px;color:var(--accent-dark)">Welcome back!</div>
+              <div style="font-weight:900;font-size:18px;color:var(--accent-dark)">Welcome Back Aspirant!</div>
             </div>
 
             <input id="login-username" class="px-input" placeholder="Username" autocomplete="username" />
@@ -311,18 +390,18 @@
 
             <div class="px-actions">
               <div style="display:flex;gap:8px;align-items:center;">
-                <button id="login-btn" class="px-btn primary">Sign in</button>
+                <button id="login-btn" class="px-btn primary">Login</button>
               </div>
-              <div style="font-size:13px;color:var(--muted);align-self:center">New here? <a href="#" style="color:#cd6a1b">Register</a></div>
+              <div style="font-size:13px;color:var(--muted);align-self:center">New here? <a href="#" style="color:#cd6a1b">Contact Admins for new registration</a></div>
             </div>
 
             <div id="login-error" class="px-help" aria-live="polite"></div>
           </div>
 
           <div class="px-login-visual">
-            <div style="width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;background:linear-gradient(135deg,#fff1e6,#fff8f0);color:#cd6a1b">PX</div>
-            <div style="font-weight:800;color:#cd6a1b;font-size:16px">Start practicing</div>
-            <div style="font-size:13px;color:var(--muted);text-align:center">Take CEE mocks, track progress, analyse mistakes and improve faster.</div>
+            <div style="width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;background:linear-gradient(135deg,#fff1e6,#fff8f0);color:#cd6a1b">PROYAX</div>
+            <div style="font-weight:800;color:#cd6a1b;font-size:16px">CEE Mock Test Series 2026</div>
+            <div style="font-size:13px;color:var(--muted);text-align:center">Take comprehensive CEE mock tests, track your performance with detailed analytics, identify mistakes with precision, and strengthen your weak areas systematically — so you can improve faster and score higher with confidence.</div>
           </div>
         </div>
       </div>
@@ -359,6 +438,11 @@
     const qtime = document.getElementById('qtime');
     const qstatus = document.getElementById('qstatus');
     const globalTimer = document.getElementById('global-timer');
+
+    // user badge DOM refs (new)
+    const userBadge = document.getElementById('user-badge');
+    const userNameEl = document.getElementById('user-name');
+    const userAvatarEl = document.getElementById('user-avatar');
 
     const openStart = document.getElementById('open-start');
     const startModal = document.getElementById('start-modal');
@@ -438,7 +522,10 @@
     // UI init
     appEl.setAttribute('aria-hidden','true');
     loginScreen.style.display = 'flex';
-    document.getElementById('user-info').textContent = 'Not signed in';
+    // ensure badge hidden by default
+    userBadge.style.display = 'none';
+    userNameEl.textContent = 'Not signed in';
+    userAvatarEl.textContent = 'P';
 
     // login (no guest/demo option)
     loginBtn.addEventListener('click', async ()=>{
@@ -457,7 +544,12 @@
     });
 
     function onLoggedIn(){
-      document.getElementById('user-info').textContent = currentUser.name;
+      // show attractive badge
+      userNameEl.textContent = currentUser.name || currentUser.username || 'User';
+      userAvatarEl.textContent = (currentUser.name && currentUser.name[0]) ? currentUser.name[0].toUpperCase() : (currentUser.username ? currentUser.username[0].toUpperCase() : 'U');
+      userBadge.style.display = 'flex';
+
+      // hide login, show app controls
       loginScreen.style.display='none';
       appEl.setAttribute('aria-hidden','false');
       resultsBtn.style.display='inline-block';
@@ -469,7 +561,9 @@
     logoutBtn.addEventListener('click', ()=>{
       if(testStarted && !submittedAlready && !confirm('Discard running test?')) return;
       currentUser=null;
-      document.getElementById('user-info').textContent='Not signed in';
+      userBadge.style.display = 'none';
+      userNameEl.textContent = 'Not signed in';
+      userAvatarEl.textContent = 'P';
       openStart.style.display='inline-block'; resultsBtn.style.display='none'; openStart.style.display='none'; logoutBtn.style.display='none';
       testStarted=false; submittedAlready=false; if(autoSubmitTimer) clearTimeout(autoSubmitTimer);
       stopGlobalTimer();
@@ -685,7 +779,38 @@
     function getGlobalIndex(section,num){ const per = Math.ceil( (questions.length/3) ); if(section==='Physics') return num-1; if(section==='Chemistry') return per+(num-1); return per*2+(num-1); }
 
     function renderQuestion(){
-      if(!testStarted){ questionEl.innerHTML = 'Click <strong>Start</strong> to begin'; optionsEl.innerHTML=''; qno.textContent='Question 1'; qtime.textContent='Time spent: 00:00'; qstatus.textContent='Status: Unseen'; return; }
+      // If test not started -> show rules block (same content as initial HTML)
+      if(!testStarted){
+        const rulesHTML = `
+          <div class="rules">
+            <h3>Rules</h3>
+            <ul>
+              <li>+4 for a correct answer</li>
+              <li>-1 for a wrong answer</li>
+              <li>0 for unanswered questions</li>
+              <li>Only one attempt allowed per mock — reattempts are not permitted</li>
+              <li>Use <strong>Mark</strong> to flag questions for review and submit when done</li>
+            </ul>
+
+            <h3 style="margin-top:10px">Dashboard — quick guide</h3>
+            <ul>
+              <li>Timer (top-right): shows elapsed time for your current attempt.</li>
+              <li>Question palette (right): jump to any question in the section; colored badges show answered/marked status.</li>
+              <li>Controls (bottom): <strong>Prev/Next</strong> to navigate, <strong>Mark</strong> to flag, and <strong>Submit</strong> to finish.</li>
+              <li>Results: after submission you can view per-question outcome, time used and summary analytics in the "Results" window.</li>
+            </ul>
+
+            <div class="muted">When you're ready, click <strong>Start</strong> to begin the mock. Good luck!</div>
+          </div>
+        `;
+        questionEl.innerHTML = rulesHTML;
+        optionsEl.innerHTML = '';
+        qno.textContent='Question 1';
+        qtime.textContent='Time spent: 00:00';
+        qstatus.textContent='Status: Unseen';
+        return;
+      }
+
       const q = questions[current];
       qno.textContent = `${q.section} • Q ${getNumberWithinSection(current)}`;
 
@@ -948,20 +1073,6 @@
       if(closeTop) closeTop.onclick = () => { detailOverlay.style.display = 'none'; };
       const closeBottom = document.getElementById('close-detail-bottom');
       if(closeBottom) closeBottom.onclick = () => { detailOverlay.style.display = 'none'; };
-
-      const exportBtn = document.getElementById('export-csv');
-      if(exportBtn){
-        exportBtn.onclick = () => {
-          const rows = [['#','qid','section','selected','correct','score','timeSec','markedReview']];
-          (d.perQuestion||[]).forEach((pq,i)=>{
-            rows.push([i+1,pq.qid||'',pq.section||'', pq.selectedIndex==null? '': String.fromCharCode(65+pq.selectedIndex), pq.correctIndex==null? '': String.fromCharCode(65+pq.correctIndex), pq.score||0, pq.timeUsedSec||0, pq.markedReview? '1':'0' ]);
-          });
-          const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-          const blob = new Blob([csv], {type:'text/csv'});
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a'); a.href = url; a.download = `${d.username||'results'}_${Date.now()}.csv`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-        };
-      }
     }
 
     closeDetail.addEventListener('click', ()=> detailOverlay.style.display='none');
