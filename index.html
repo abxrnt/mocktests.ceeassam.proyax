@@ -102,8 +102,10 @@
     .legend .item{display:flex;gap:8px;align-items:center;margin-top:6px}
     .sw{width:12px;height:12px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,0.04)}
 
-    .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.35);z-index:1200;padding:10px}
-    .start-card{background:#fff;padding:10px;border-radius:8px;max-width:880px;width:100%;box-shadow:0 24px 60px rgba(2,6,23,0.14);border:1px solid rgba(255,245,235,0.9)}
+    /* make overlays scrollable when content taller than viewport */
+    .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.35);z-index:1200;padding:10px; /* keep centered but allow scrolling */ overflow:auto;}
+    /* constrain start-card height and enable internal scroll */
+    .start-card{background:#fff;padding:10px;border-radius:8px;max-width:880px;width:100%;box-shadow:0 24px 60px rgba(2,6,23,0.14);border:1px solid rgba(255,245,235,0.9); max-height: calc(100vh - 40px); overflow:auto;}
     .mock-card{padding:6px;border-radius:8px;border:1px solid rgba(250,240,230,0.9);display:flex;flex-direction:column;gap:6px}
     .mock-card.inactive{opacity:0.45;filter:grayscale(30%);pointer-events:none; position:relative;}
     .mock-card.inactive::after{
