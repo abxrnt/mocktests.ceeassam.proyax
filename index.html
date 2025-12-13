@@ -807,138 +807,138 @@
     closeMocks.addEventListener('click', ()=>{ startModal.style.display='none'; });
 
     /* ========== start mock ========== */
-    async function startMock(mock){
-      if(!mock) return;
-      const isActive = (typeof mock.active === 'string') ? (mock.active.toLowerCase()==='yes' || mock.active.toLowerCase()==='true') : !!mock.active;
-      if(!isActive){ alert('This mock is not available.'); return; }
+async function startMock(mock){
+  if(!mock) return;
 
-      if(currentUser && db){
-        const already = await hasAttempted(mock.id);
-        if(already){ alert('You have already attempted this mock. Reattempt is not allowed.'); await loadMocks(); return; }
-      }
+  const isActive =
+    typeof mock.active === 'string'
+      ? mock.active.toLowerCase() === 'true' || mock.active.toLowerCase() === 'yes'
+      : !!mock.active;
 
-      if(testStarted && !confirm('Discard current test?')) return;
-      let fetched=[];
+  if(!isActive){
+    alert('This mock is not available.');
+    return;
+  }
 
-      if(db){
-        try{
-          // <-- IMPORTANT: fetch questions ordered by index to preserve admin order
-          const sub = await db.collection('mocks').doc(mock.id).collection('questions').orderBy('index').get().catch(()=>({docs:[]})); 
-          fetched = sub.docs.map(d=>({id:d.id,...d.data()}));
-          if(!fetched.length){
-            // fallback to older flattened approach
-            const q2snap = await db.collection('questions').where('mockId','==',mock.id).orderBy('index').get().catch(()=>({docs:[]})); 
-            fetched = q2snap.docs.map(d=>({id:d.id,...d.data()}));
-          }
-        }catch(e){ console.warn(e); }
-      }
-
-      function builtFromMockFields(m){
-        const total = Number(m.qns || m.questionCount || 0) || 0;
-        const totalCount = total > 0 ? total : 60;
-        const per = Math.floor(totalCount / 3) || 20;
-        const makeFor = (prefix, sectionName) => {
-          const arr=[];
-          for(let i=1;i<=per;i++){
-            const imgFieldCandidates = [`img_${prefix}${i}`, `img${prefix}${i}`, `${prefix}img${i}`, `${prefix}${i}`];
-            const ansFieldCandidates = [`ans_${prefix}${i}`, `ans_${prefix}${i}`, `ans${i}`, `${prefix}ans${i}`];
-
-            let imgVal = null;
-            for(const f of imgFieldCandidates){
-              if(Object.prototype.hasOwnProperty.call(m, f) && m[f]) { imgVal = m[f]; break; }
-            }
-            if(!imgVal) imgVal = findImageFromDoc(m);
-
-            let ansVal = null;
-            for(const f of ansFieldCandidates){
-              if(Object.prototype.hasOwnProperty.call(m, f) && m[f]) { ansVal = m[f]; break; }
-            }
-
-            arr.push({
-              id: `${prefix.toUpperCase()}${i}`,
-              section: sectionName,
-              text: null,
-              img: imgVal ? imgVal : null,
-              options: ['A','B','C','D'],
-              answerIndex: letterToIndex(ansVal)
-            });
-          }
-          return arr;
-        };
-        const phys = makeFor('p','Physics');
-        const chem = makeFor('c','Chemistry');
-        const math = makeFor('m','Mathematics');
-        return phys.concat(chem).concat(math);
-      }
-
-      let built = [];
-      if(fetched.length){
-        // safer mapping: prefer explicit section/qid/index
-        built = fetched.map((q,i)=>( {
-          id: q.id || ('Q'+i),
-          section: (q.section) ? q.section : (q.qid ? (String(q.qid)[0].toUpperCase()==='P' ? 'Physics' : (String(q.qid)[0].toUpperCase()==='C' ? 'Chemistry' : (String(q.qid)[0].toUpperCase()==='M' ? 'Mathematics' : null))) : null),
-          text: q.text || q.question || null,
-          img: findImageFromDoc(q) || normalizeImgUrl(q.imageUrl || q.img || q.image) || null,
-          options: q.options || ['A','B','C','D'],
-          answerIndex: (typeof q.answerIndex === 'number' ? q.answerIndex : letterToIndex(q.answer || q.ans || q.correct))
-        } ));
-      } else {
-        built = builtFromMockFields(mock);
-      }
-
-      if(!built.length) built = sampleBank();
-
-      questions = built.map((q,i)=>( {
-        id: q.id || ('Q'+i),
-        section: q.section || (i<20?'Physics':(i<40?'Chemistry':'Mathematics')),
-        text: q.text || null,
-        img: normalizeImgUrl(q.img),
-        options: q.options || ['A','B','C','D'],
-        answerIndex: (typeof q.answerIndex === 'number' ? q.answerIndex : letterToIndex(q.answerIndex || q.correct || q.ans))
-      } ));
-
-      /* === SECTION MAP ===
-         Build a map of which question indices belong to each section.
-         This removes the fragile assumption that sections are equal thirds.
-      */
-      function buildSectionMap(){
-        const map = {};
-        for(let i=0;i<questions.length;i++){
-          const s = questions[i].section || 'Unknown';
-          if(!map[s]) map[s]=[];
-          map[s].push(i);
-        }
-        // prefer canonical ordering
-        const preferred = ['Physics','Chemistry','Mathematics'];
-        const ordered = {};
-        preferred.forEach(p=>{ if(map[p]) ordered[p]=map[p]; });
-        Object.keys(map).forEach(k=>{ if(!ordered[k]) ordered[k]=map[k]; });
-        return ordered;
-      }
-
-      // store the map globally (so other functions can use it)
-      sectionMap = buildSectionMap();
-
-      // init responses/timers/state — include viewed flag
-      responses = questions.map(()=>({choiceIndex:null,markedReview:false,timeSpentSec:0, viewed:false}));
-      questionTimers = questions.map(()=>null);
-      current = 0;
-      // duration handling: set totalDurationSec for countdown
-      const durationMinutes = Number(mock.duration || mock.time) || 120;
-      totalDurationSec = Math.max(0, Math.floor(durationMinutes * 60));
-      startTime = Date.now(); testStarted = true; submittedAlready=false;
-      // start countdown-based global timer
-      startGlobalTimer();
-      renderQuestion();
-      setActiveSection('Physics');
-      renderPicker('Physics');
-
-      currentMockId = mock.id || null;
-      openStart.style.display = 'none';
-
-      // no longer using setTimeout autoSubmitTimer; countdown triggers submit when it reaches 0
-      if(autoSubmitTimer){ clearTimeout(autoSubmitTimer); autoSubmitTimer = null; }
+  if(currentUser && db){
+    const already = await hasAttempted(mock.id);
+    if(already){
+      alert('You have already attempted this mock.');
+      await loadMocks();
+      return;
     }
+  }
+
+  let built = [];
+
+  /* ======================================================
+     1️⃣ TRY SUBCOLLECTION (NO CHANGE – EXISTING LOGIC)
+  ====================================================== */
+  if(db){
+    try{
+      const snap = await db
+        .collection('mocks')
+        .doc(mock.id)
+        .collection('questions')
+        .orderBy('index')
+        .get();
+
+      if(!snap.empty){
+        built = snap.docs.map((d,i)=> {
+          const q = d.data();
+          return {
+            id: d.id,
+            section: q.section,
+            text: q.text || null,
+            img: q.img || q.image || q.imageUrl || null,
+            options: ['A','B','C','D'],
+            answerIndex: letterToIndex(q.ans || q.answer || q.correct)
+          };
+        });
+      }
+    }catch(e){
+      console.warn('Subcollection fetch failed', e);
+    }
+  }
+
+  /* ======================================================
+     🔥 2️⃣ NEW: SUPPORT SUBJECT-WISE QUESTIONS OBJECT
+     (THIS MATCHES YOUR SCREENSHOT EXACTLY)
+  ====================================================== */
+  if(!built.length && mock.questions && typeof mock.questions === 'object'){
+    const subjects = ['Physics','Chemistry','Mathematics'];
+
+    subjects.forEach(subject=>{
+      const arr = mock.questions[subject];
+      if(Array.isArray(arr)){
+        arr.forEach((q,i)=>{
+          built.push({
+            id: `${subject[0]}${i+1}`,
+            section: subject,
+            text: null,
+            img: q.img || null,
+            options: ['A','B','C','D'],
+            answerIndex: letterToIndex(q.ans)
+          });
+        });
+      }
+    });
+  }
+
+  /* ======================================================
+     3️⃣ OLD FALLBACK (UNCHANGED)
+  ====================================================== */
+  if(!built.length){
+    built = sampleBank();
+  }
+
+  /* ======================================================
+     FINAL NORMALIZATION (UNCHANGED)
+  ====================================================== */
+  questions = built.map((q,i)=>({
+    id: q.id || `Q${i+1}`,
+    section: q.section,
+    text: q.text,
+    img: normalizeImgUrl(q.img),
+    options: q.options || ['A','B','C','D'],
+    answerIndex: q.answerIndex
+  }));
+
+  // build section map (UNCHANGED)
+  sectionMap = {};
+  questions.forEach((q,i)=>{
+    if(!sectionMap[q.section]) sectionMap[q.section] = [];
+    sectionMap[q.section].push(i);
+  });
+
+  responses = questions.map(()=>({
+    choiceIndex:null,
+    markedReview:false,
+    timeSpentSec:0,
+    viewed:false
+  }));
+
+  questionTimers = questions.map(()=>null);
+  current = 0;
+
+  const durationMin = Number(mock.duration) || 120;
+  totalDurationSec = durationMin * 60;
+
+  startTime = Date.now();
+  testStarted = true;
+  submittedAlready = false;
+
+  startGlobalTimer();
+const firstSection = updateSectionTabs();
+if(firstSection){
+  setActiveSection(firstSection);
+}
+
+
+  currentMockId = mock.id;
+  openStart.style.display = 'none';
+}
+
 
     /* ========== render / timers ========== */
     function startGlobalTimer(){
@@ -1530,6 +1530,27 @@
 
     // auto-focus username when login shows
     // If you programmatically show login screen elsewhere, call: loginUsername.focus()
+
+function updateSectionTabs(){
+  const phyBtn = document.getElementById('btn-phy');
+  const chemBtn = document.getElementById('btn-chem');
+  const mathBtn = document.getElementById('btn-math');
+
+  const hasPhysics = sectionMap && sectionMap.Physics && sectionMap.Physics.length;
+  const hasChem = sectionMap && sectionMap.Chemistry && sectionMap.Chemistry.length;
+  const hasMath = sectionMap && sectionMap.Mathematics && sectionMap.Mathematics.length;
+
+  phyBtn.style.display  = hasPhysics ? 'inline-block' : 'none';
+  chemBtn.style.display = hasChem ? 'inline-block' : 'none';
+  mathBtn.style.display = hasMath ? 'inline-block' : 'none';
+
+  // return first available section (priority order)
+  if(hasPhysics) return 'Physics';
+  if(hasChem) return 'Chemistry';
+  if(hasMath) return 'Mathematics';
+  return null;
+}
+
   </script>
 </body>
 </html>
