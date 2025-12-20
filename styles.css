@@ -77,7 +77,7 @@ body {
 
 .title {
   font-family: "Playfair Display", serif; /* 🔥 stylish curly */
-  font-size: 28px; /* larger */
+  font-size: 20px; /* larger */
   font-weight: 800;
   letter-spacing: 0.6px;
   color: var(--accent-dark);
