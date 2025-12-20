@@ -2,2321 +2,394 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="google-site-verification" content="Y0kjf7mImXV2yFOMYnVNcZ9hZ8YAluEf_EdReKN-xYo" />
-  <meta name="description"
-    content="Practice Assam CEE mock tests with real exam pattern, instant results, and detailed analysis. Prepare smarter with PROYAX CEE.">
-  <title>Assam CEE Mock Test 2026 | Free Online Practice – PROYAX</title>
-  <link rel="icon" href="favicon.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
-
-  <style>
-    :root {
-      --accent-dark: #f97316;
-      --muted: #6b7280;
-      --panel: #fffaf6;
-      --side-w: 240px;
-      --logo: 30px;
-      --gpad: 6px;
-      --card-r: 6px;
-      --qbtn: 26px;
-      --qgap: 4px;
-      --fs-sm: 11px;
-      --fs-md: 13px;
-      --fs-lg: 14px;
-    }
-
-    html,
-    body {
-      height: 100vh;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      font-size: 13px
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    .app {
-      height: 100vh;
-      display: flex;
-      gap: 6px;
-      padding: 8px;
-      background: linear-gradient(180deg, #fff9f5, #fff3ea);
-      align-items: stretch
-    }
-
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      height: 100%;
-      min-width: 0
-    }
-
-    .side {
-      width: var(--side-w);
-      background: linear-gradient(180deg, #fff6f0, #fffaf7);
-      padding: 8px;
-      border-radius: 10px;
-      border-left: 1px solid rgba(255, 215, 180, 0.6);
-      display: flex;
-      flex-direction: column;
-      height: 100%
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px
-    }
-
-    .brand {
-      display: flex;
-      gap: 6px;
-      align-items: center
-    }
-
-    .brand img {
-      width: var(--logo);
-      height: var(--logo);
-      border-radius: 8px
-    }
-
-    .title {
-      font-weight: 800;
-      font-size: var(--fs-lg);
-      color: var(--accent-dark)
-    }
-
-    .subtitle {
-      font-size: var(--fs-sm);
-      color: var(--muted)
-    }
-
-    .meta {
-      display: flex;
-      gap: 6px;
-      align-items: center
-    }
-
-    .timer {
-      padding: 5px 7px;
-      border-radius: 8px;
-      background: #fff4ea;
-      border: 1px solid rgba(255, 218, 180, 0.8);
-      font-weight: 800;
-      font-size: 12px;
-      color: var(--accent-dark)
-    }
-
-    .question-card {
-      flex: 1;
-      background: #fff;
-      background: linear-gradient(180deg, #ffffff, #fffaf7);
-      padding: 8px;
-      border-radius: var(--card-r);
-      overflow: auto;
-      border: 1px solid rgba(250, 230, 210, 0.8);
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
-      display: flex;
-      flex-direction: column;
-      min-width: 0
-    }
-
-    .question-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 6px
-    }
-
-    .qno {
-      font-weight: 800;
-      font-size: var(--fs-md)
-    }
-
-    .meta-sm {
-      font-size: var(--fs-sm);
-      color: var(--muted)
-    }
-
-    .question {
-      margin-top: 6px;
-      font-size: var(--fs-md);
-      min-height: 260px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #0f172a;
-      padding: 6px
-    }
-
-    .question img {
-      max-width: 100%;
-      max-height: 360px;
-      object-fit: contain;
-      border-radius: 6px;
-      box-shadow: 0 6px 20px rgba(2, 6, 23, 0.04)
-    }
-
-    .options {
-      margin-top: 8px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px
-    }
-
-    .opt {
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid #fde8d6;
-      font-size: 13px;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-weight: 900
-    }
-
-    .opt.selected {
-      border: 1px solid var(--accent-dark);
-      background: #fff6f0;
-      color: var(--accent-dark)
-    }
-
-    .controls {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 0
-    }
-
-    button {
-      font-weight: 800;
-      border: 0;
-      border-radius: 8px;
-      cursor: pointer;
-      padding: 6px 10px;
-      font-size: 12px
-    }
-
-    .btn-primary {
-      background: var(--accent-dark);
-      color: #fff;
-      box-shadow: 0 8px 18px rgba(249, 115, 22, 0.08)
-    }
-
-    .btn-secondary {
-      background: transparent;
-      border: 1px solid rgba(200, 180, 160, 0.5);
-      color: var(--muted)
-    }
-
-    .btn-danger {
-      background: #ef4444;
-      color: #fff
-    }
-
-    .side h3 {
-      margin: 0;
-      font-size: var(--fs-md);
-      color: var(--accent-dark);
-      font-weight: 800
-    }
-
-    .seg {
-      display: flex;
-      gap: 6px;
-      margin-top: 6px;
-      flex-wrap: wrap;
-      align-items: center
-    }
-
-    .seg button {
-      flex: 0 1 auto;
-      padding: 4px 8px;
-      border-radius: 8px;
-      background: #fff5ec;
-      border: 1px solid rgba(255, 220, 180, 0.5);
-      font-weight: 800;
-      font-size: 11px;
-      cursor: pointer;
-      min-width: 0
-    }
-
-    .seg button.active {
-      background: linear-gradient(90deg, #fff2ea, #fff4ed);
-      border-color: #ffd8a8;
-      color: var(--accent-dark);
-      box-shadow: 0 6px 12px rgba(249, 115, 22, 0.05)
-    }
-
-    .picker {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: var(--qgap);
-      margin-top: 8px;
-      overflow: auto;
-      max-height: calc(100% - 220px);
-      padding-right: 6px
-    }
-
-    .qbtn {
-      height: var(--qbtn);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff6ec;
-      border: 1px solid rgba(255, 220, 180, 0.7);
-      font-weight: 800;
-      font-size: 12px;
-      cursor: pointer;
-      position: relative;
-      overflow: visible
-    }
-
-    .qbtn.answered {
-      background: linear-gradient(90deg, #ecfdf5, #d1fae5);
-      border-color: #bbf7d0;
-      color: #0b9a6b
-    }
-
-    .qbtn.review {
-      background: linear-gradient(90deg, #eef2ff, #e0e7ff);
-      border-color: #c7d2fe;
-      color: #2b6ee6
-    }
-
-    /* VIEWED state: non-filled but with small orange corner ribbon */
-    /* This creates a triangular ribbon at top-left */
-    .qbtn.viewed {
-      background: #fff6ec;
-      border-color: rgba(255, 200, 150, 0.8);
-      color: #111;
-    }
-
-    .qbtn.viewed::before {
-      content: "";
-      position: absolute;
-      left: -1px;
-      top: -1px;
-      width: 0;
-      height: 0;
-      border-top: 20px solid var(--accent-dark);
-      border-right: 20px solid transparent;
-      border-left: 0;
-      transform-origin: 0 0;
-      border-bottom: 0;
-      z-index: 2;
-      border-top-left-radius: 4px;
-    }
-
-    .qbtn.viewed::after {
-      content: "";
-      position: absolute;
-      left: 3px;
-      top: 2px;
-      width: 6px;
-      height: 6px;
-      transform: rotate(45deg);
-      background: rgba(255, 255, 255, 0.25);
-      z-index: 3;
-      border-radius: 1px;
-    }
-
-    .legend {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #222
-    }
-
-    .legend .item {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-top: 6px
-    }
-
-    .sw {
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-      display: inline-block;
-      border: 1px solid rgba(0, 0, 0, 0.04)
-    }
-
-    /* make overlays scrollable when content taller than viewport */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(2, 6, 23, 0.35);
-      z-index: 1200;
-      padding: 10px;
-      /* keep centered but allow scrolling */
-      overflow: auto;
-    }
-
-    /* constrain start-card height and enable internal scroll */
-    .start-card {
-      background: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      max-width: 880px;
-      width: 100%;
-      box-shadow: 0 24px 60px rgba(2, 6, 23, 0.14);
-      border: 1px solid rgba(255, 245, 235, 0.9);
-      max-height: calc(100vh - 40px);
-      overflow: auto;
-    }
-
-    .mock-card {
-      padding: 6px;
-      border-radius: 8px;
-      border: 1px solid rgba(250, 240, 230, 0.9);
-      display: flex;
-      flex-direction: column;
-      gap: 6px
-    }
-
-    .mock-card.inactive {
-      opacity: 0.45;
-      filter: grayscale(30%);
-      pointer-events: none;
-      position: relative;
-    }
-
-    .mock-card.inactive::after {
-      content: "Not available";
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 6px;
-      padding: 4px 6px;
-      font-weight: 800;
-      font-size: 12px;
-      color: #b37b4a;
-      border: 1px solid rgba(255, 220, 180, 0.6);
-    }
-
-    .login-screen {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at 10% 10%, #fff7f0 0%, #fff1e6 20%, #fff3ea 40%, #fff3ea 100%);
-      z-index: 2500;
-      padding: 20px
-    }
-
-    /* fullscreen layout (no floating card) */
-    .px-login-fullscreen {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      align-items: stretch;
-      justify-content: center;
-    }
-
-    .px-login-top {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 18px 28px;
-      border-bottom: 1px solid rgba(15, 23, 42, 0.03);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 250, 245, 0.4));
-    }
-
-    .px-login-top img {
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-    }
-
-    .px-login-top h1 {
-      font-size: 18px;
-      margin: 0;
-      color: var(--accent-dark);
-      font-weight: 900;
-    }
-
-    .px-login-center {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
-    }
-
-    .px-login-formwrap {
-      width: 100%;
-      max-width: 920px;
-      display: flex;
-      gap: 28px;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .px-login-column {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .px-input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(15, 23, 42, 0.06);
-      background: #fff;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .px-input:focus {
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
-      border-color: rgba(31, 120, 255, 0.12);
-    }
-
-    .px-actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-top: 6px;
-    }
-
-    .px-btn {
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-weight: 800;
-      border: 0;
-      cursor: pointer;
-    }
-
-    .px-btn.primary {
-      background: linear-gradient(90deg, #ff7a16, #ff9a4b);
-      color: #fff;
-    }
-
-    .px-help {
-      color: #ef4444;
-      font-size: 13px;
-      min-height: 18px;
-    }
-
-    .px-login-visual {
-      width: 320px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 18px;
-      background: linear-gradient(180deg, #fff6f0, #fff2ec);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 230, 210, 0.8);
-    }
-
-    @media (max-width:880px) {
-      .px-login-formwrap {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .px-login-visual {
-        width: 100%;
-        order: 2;
-      }
-
-      .px-login-top {
-        padding: 12px;
-      }
-
-      .px-login-center {
-        padding: 12px;
-      }
-    }
-
-    .history-card {
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid rgba(250, 240, 230, 0.9)
-    }
-
-    #detail-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 1300;
-      align-items: center;
-      justify-content: center;
-      background: rgba(8, 10, 12, 0.45);
-      backdrop-filter: blur(6px) saturate(105%);
-      padding: 18px;
-    }
-
-    .detail-card {
-      width: min(100%, 920px);
-      background: linear-gradient(180deg, #ffffff, #fffaf7);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 30px 80px rgba(2, 6, 23, 0.26);
-      border: 1px solid rgba(255, 245, 235, 0.9);
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 0;
-      min-height: 320px;
-    }
-
-    .detail-left {
-      padding: 16px;
-      overflow: auto;
-      max-height: calc(80vh - 40px);
-    }
-
-    .detail-right {
-      background: linear-gradient(180deg, #fff6f0, #fff2ec);
-      padding: 18px;
-      border-left: 1px solid rgba(255, 230, 210, 0.7);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: stretch;
-      min-width: 260px;
-    }
-
-    .detail-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-
-    .detail-title {
-      font-size: 16px;
-      font-weight: 900;
-      color: var(--accent-dark);
-    }
-
-    .detail-sub {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .score-badge {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 14px;
-      border-radius: 12px;
-      background: linear-gradient(180deg, #fff7ee, #fff0df);
-      border: 1px solid rgba(255, 210, 160, 0.6);
-      font-weight: 900;
-      color: var(--accent-dark);
-      box-shadow: 0 10px 30px rgba(249, 115, 22, 0.06);
-    }
-
-    .stats-row {
-      display: flex;
-      gap: 8px;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      color: #123;
-    }
-
-    .stat {
-      background: rgba(255, 255, 255, 0.6);
-      border-radius: 10px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      min-width: 0;
-      flex: 1;
-      border: 1px solid rgba(255, 230, 210, 0.7);
-    }
-
-    .stat strong {
-      font-size: 16px;
-    }
-
-    .stat span {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .progress-wrap {
-      width: 100%;
-      margin-top: 4px
-    }
-
-    .progress {
-      height: 10px;
-      background: linear-gradient(90deg, #fff7f2, #fffaf7);
-      border-radius: 999px;
-      border: 1px solid rgba(255, 230, 210, 0.8);
-      overflow: hidden;
-    }
-
-    .progress>i {
-      display: block;
-      height: 100%;
-      background: linear-gradient(90deg, #34d399, #10b981);
-      width: 0%;
-      transition: width .7s cubic-bezier(.2, .9, .3, 1);
-    }
-
-    .perq {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .perq-item {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      padding: 8px;
-      border-radius: 10px;
-      background: linear-gradient(180deg, #ffffff, #fffaf7);
-      border: 1px solid rgba(250, 240, 230, 0.9);
-    }
-
-    .perq-left {
-      min-width: 46px;
-      text-align: center;
-      font-weight: 800;
-      color: #111;
-    }
-
-    .perq-mid {
-      flex: 1;
-      font-size: 13px;
-      color: #0f172a;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .perq-mid .qid {
-      font-weight: 800;
-      color: var(--muted);
-      min-width: 40px;
-    }
-
-    .badge {
-      padding: 6px 8px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .badge.correct {
-      background: linear-gradient(90deg, #ecfdf5, #d1fae5);
-      color: #0b9a6b;
-      border-color: #bbf7d0;
-    }
-
-    .badge.wrong {
-      background: linear-gradient(90deg, #fff1f2, #fee2e2);
-      color: #ef4444;
-      border-color: #fecaca;
-    }
-
-    .badge.unseen {
-      background: linear-gradient(90deg, #fffaf0, #fff6ec);
-      color: #b37b4a;
-      border-color: #ffe4cf;
-    }
-
-    @media (max-width:900px) {
-      .side {
-        display: none
-      }
-
-      .app {
-        padding: 6px
-      }
-    }
-
-    .user-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #fff6ed, #fff2e7);
-      border: 1px solid rgba(255, 220, 190, 0.7);
-      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
-    }
-
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #ffedd5, #ffc999);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #9a4b11;
-      font-size: 14px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .user-name {
-      font-weight: 800;
-      font-size: 13px;
-      color: var(--accent-dark);
-      max-width: 120px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .rules {
-      text-align: left;
-      max-width: 760px;
-      line-height: 1.4;
-      color: #0f172a;
-    }
-
-    .rules h3 {
-      margin: 0 0 6px 0;
-      font-size: 15px;
-      color: var(--accent-dark);
-    }
-
-    .rules ul {
-      margin: 6px 0 0 18px;
-      padding: 0;
-    }
-
-    .rules ul li {
-      margin: 6px 0;
-      font-weight: 700;
-      font-size: 13px;
-      color: #111;
-    }
-
-    .rules .muted {
-      font-weight: 600;
-      color: var(--muted);
-      font-size: 12.5px;
-      margin-top: 8px;
-      display: block;
-    }
-
-    /* Confirmation modal styling */
-    #confirm-submit-modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      background: rgba(8, 10, 12, 0.45);
-      padding: 18px;
-    }
-
-    .confirm-card {
-      width: min(100%, 520px);
-      background: linear-gradient(180deg, #ffffff, #fffaf7);
-      border-radius: 12px;
-      padding: 16px;
-      border: 1px solid rgba(255, 245, 235, 0.95);
-      box-shadow: 0 30px 80px rgba(2, 6, 23, 0.26);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .confirm-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .confirm-title {
-      font-size: 16px;
-      font-weight: 900;
-      color: var(--accent-dark);
-    }
-
-    .confirm-stats {
-      font-size: 14px;
-      color: #111;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .confirm-stat {
-      background: linear-gradient(180deg, #fff6f0, #fff2ec);
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-weight: 800;
-      border: 1px solid rgba(255, 230, 210, 0.8);
-      min-width: 120px;
-      text-align: center;
-    }
-
-    .confirm-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      margin-top: 4px;
-    }
-
-    /* Info button */
-    .info-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: #fff6ed;
-      border: 1px solid rgba(79, 79, 79, 0.8);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000000;
-      font-weight: 900;
-    }
-
-    .info-btn:hover {
-      background: #ffe8d5;
-    }
-
-    /* Developer info modal */
-    #dev-info-modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      z-index: 3000;
-      align-items: center;
-      justify-content: center;
-      background: rgba(8, 10, 12, .45);
-    }
-
-    .dev-info-card {
-      width: min(100%, 360px);
-      background: #fff;
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 30px 80px rgba(2, 6, 23, .3);
-      border: 1px solid rgba(255, 230, 210, .9);
-    }
-
-    .dev-info-card h3 {
-      margin: 0 0 6px 0;
-      color: #f97316;
-      font-weight: 900;
-    }
-
-    .dev-info-card p {
-      margin: 6px 0;
-      font-size: 13px;
-      color: #333;
-    }
-  </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="google-site-verification" content="Y0kjf7mImXV2yFOMYnVNcZ9hZ8YAluEf_EdReKN-xYo" />
+    <meta name="description"
+        content="Practice Assam CEE mock tests with real exam pattern, instant results, and detailed analysis. Prepare smarter with PROYAX CEE.">
+    <title>CIVINITY - Assam CEE Mock Test Series 2026 | Free Online Practice</title>
+    <link rel="icon" href="favicon-v2.png?v=2" type="image/png">
+    <link rel="apple-touch-icon" href="favicon-v2.png?v=2">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
-  <!-- MAIN APP -->
-  <div class="app" id="app" aria-hidden="true">
-    <div class="main">
-      <div class="header">
-        <div class="brand">
-          <img src="favicon.png" alt="logo" />
-          <div>
-            <div class="title">PROYAX — CEE Mock Test</div>
-            <div class="subtitle">Secure your seat with practice-driven mock tests</div>
-          </div>
-        </div>
+    <!-- MAIN APP -->
+    <div class="app" id="app" aria-hidden="true">
+        <div class="main">
+            <div class="header">
+                <div class="brand">
+                    <img id="app-banner" src="assets/banner.jpeg" alt="PROYAX Banner" />
+                    <div>
+                        <div class="title">CEE Mock Test</div>
+                        <div class="subtitle">Secure your seat with practice-driven mock tests</div>
+                    </div>
+                </div>
 
-        <div class="meta" style="align-items:center;gap:12px">
+                <div class="meta" style="align-items:center;gap:12px">
 
-          <!-- TIME REMAINING -->
-          <div style="display:flex;align-items:center;gap:6px;font-weight:800;font-size:12px;color:var(--accent-dark)">
-            <span style="color:var(--muted);font-weight:800;">Time Remaining:</span>
-            <div class="timer" id="global-timer">00:00:00</div>
-          </div>
+                    <!-- TIME REMAINING -->
+                    <div
+                        style="display:flex;align-items:center;gap:6px;font-weight:800;font-size:12px;color:var(--accent-dark)">
+                        <span style="color:var(--muted);font-weight:800;">Time Remaining:</span>
+                        <div class="timer" id="global-timer">00:00:00</div>
+                    </div>
 
-          <!-- ATTRACTIVE USER BADGE -->
-          <div id="user-badge" class="user-badge" style="display:none">
-            <div id="user-avatar" class="avatar">U</div>
-            <div id="user-name" class="user-name">User</div>
-          </div>
+                    <!-- ATTRACTIVE USER BADGE -->
+                    <div id="user-badge" class="user-badge" style="display:none">
+                        <div id="user-avatar" class="avatar">U</div>
+                        <div id="user-name" class="user-name">User</div>
+                    </div>
 
-          <button id="results-btn" class="btn-secondary" style="display:none">Results</button>
-          <button id="open-login" class="btn-primary" style="display:none">Login</button>
-          <button id="logout-btn" class="btn-secondary" style="display:none">Logout</button>
-          <button id="open-start" class="btn-primary" style="display:none">Start</button>
+                    <button id="results-btn" class="btn-secondary" style="display:none">Results</button>
+                    <button id="open-login" class="btn-primary" style="display:none">Login</button>
+                    <button id="logout-btn" class="btn-secondary" style="display:none">Logout</button>
+                    <button id="open-start" class="btn-primary" style="display:none">Start</button>
 
-        </div>
+                </div>
 
-      </div>
-
-      <div class="question-card" id="question-card">
-        <div class="question-top">
-          <div>
-            <div class="qno" id="qno">Question 1</div>
-            <div class="meta-sm" id="qtime">Time spent: 00:00</div>
-          </div>
-          <div class="meta-sm" id="qstatus">Status: Unseen</div>
-        </div>
-
-        <!-- SHOW RULES & DASHBOARD HELP BEFORE START -->
-        <div class="question" id="question">
-          <div class="rules" id="rules-block">
-            <h3>Rules</h3>
-            <ul>
-              <li>+4 for a correct answer</li>
-              <li>-1 for a wrong answer</li>
-              <li>0 for unanswered questions</li>
-              <li>Only one attempt allowed per mock — reattempts are not permitted</li>
-              <li>Use <strong>Mark</strong> to flag questions for review and submit when done</li>
-            </ul>
-
-            <h3 style="margin-top:10px">Dashboard — quick guide</h3>
-            <ul>
-              <li>Timer (top-right): shows elapsed time for your current attempt.</li>
-              <li>Question palette (right): jump to any question in the section; colored badges show answered/marked
-                status.</li>
-              <li>Controls (bottom): <strong>Prev/Next</strong> to navigate, <strong>Mark</strong> to flag, and
-                <strong>Submit</strong> to finish.
-              </li>
-              <li>Results: after submission you can view per-question outcome, time used and summary analytics in the
-                "Results" window.</li>
-            </ul>
-
-            <div class="muted">When you're ready, click <strong>Start</strong> to begin the mock. Good luck!</div>
-          </div>
-        </div>
-
-        <div class="options" id="options"></div>
-      </div>
-
-      <div class="controls">
-        <button class="btn-secondary" id="mark-review">Mark</button>
-        <!-- ADDED CLEAR BUTTON -->
-        <button class="btn-secondary" id="clear-btn">Clear</button>
-        <button class="btn-secondary" id="prev-btn">Prev</button>
-        <button class="btn-primary" id="next-btn">Next</button>
-        <button class="btn-danger" id="submit-btn">Submit</button>
-      </div>
-    </div>
-
-    <div class="side" aria-hidden="true">
-      <h3>Choose Section</h3>
-      <button id="info-btn" class="info-btn" title="About developers">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-  viewBox="0 0 24 24" fill="currentColor">
-  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
-  10-4.48 10-10S17.52 2 12 2zm0 4a1.25 1.25 0 110 2.5A1.25 1.25 0 0112 6zm1.5 12h-3v-2h1v-4h-1V10h3v6h1v2z"/>
-</svg>
-
-      </button>
-      <div class="seg">
-        <button id="btn-phy" class="active">Physics</button>
-        <button id="btn-chem">Chemistry</button>
-        <button id="btn-math">Mathematics</button>
-      </div>
-
-      <div id="section-picker" class="picker" aria-label="Question picker"></div>
-
-      <div class="legend">
-        <div style="font-weight:700;margin-top:6px">Legend</div>
-        <div class="item"><span class="sw" style="background:#fff3e0;border:1px solid #ffe4cf"></span> Unseen / viewed
-        </div>
-        <div class="item"><span class="sw" style="background:#ecfdf5;border:1px solid #bbf7d0"></span> Answered</div>
-        <div class="item"><span class="sw" style="background:#eef2ff;border:1px solid #c7d2fe"></span> Marked</div>
-      </div>
-
-      <div style="margin-top:auto;font-size:13px;color:var(--muted)">Controls</div>
-      <div style="height:6px"></div>
-    </div>
-  </div>
-
-  <!-- START MODAL, HISTORY, DETAIL (same as before) -->
-  <div class="overlay start-modal" id="start-modal" aria-hidden="true">
-    <div class="start-card" role="dialog" aria-modal="true" aria-labelledby="start-title">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h3 id="start-title" style="margin:0;font-size:14px">Select Mock</h3>
-        <button id="close-mocks" class="btn-secondary">Close</button>
-      </div>
-      <div id="mocks-container"
-        style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:10px"></div>
-    </div>
-  </div>
-
-  <div class="overlay" id="history-overlay" style="display:none">
-    <div style="width:100%;max-width:880px;background:#fff;padding:8px;border-radius:10px;overflow:auto">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h3 style="margin:0">Your Submissions</h3>
-        <button id="close-history" class="btn-secondary">Close</button>
-      </div>
-      <div id="history-grid"
-        style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px"></div>
-    </div>
-  </div>
-
-  <div class="overlay" id="detail-overlay" style="display:none">
-    <div class="detail-card" role="dialog" aria-modal="true" aria-labelledby="detail-title">
-      <div class="detail-left">
-        <div class="detail-header">
-          <div>
-            <div id="detail-title" class="detail-title">Submission</div>
-            <div id="detail-sub" class="detail-sub">Summary</div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <div id="detail-score" class="score-badge">
-              <div class="big">0</div>
-              <div class="small">Score</div>
-            </div>
-            <button id="close-detail" class="btn-secondary">Close</button>
-          </div>
-        </div>
-
-        <div class="stats-row" aria-hidden="false">
-          <div class="stat">
-            <strong id="stat-correct">0</strong>
-            <span>Correct</span>
-          </div>
-          <div class="stat">
-            <strong id="stat-wrong">0</strong>
-            <span>Wrong</span>
-          </div>
-          <div class="stat">
-            <strong id="stat-unanswered">0</strong>
-            <span>Unanswered</span>
-          </div>
-        </div>
-
-        <div class="progress-wrap" aria-hidden="false">
-          <div style="font-size:12px;color:var(--muted);margin-top:6px">Completion</div>
-          <div class="progress" aria-hidden="false"><i id="progress-bar"></i></div>
-        </div>
-
-        <div class="perq" id="perq-list" aria-live="polite"></div>
-      </div>
-
-      <div class="detail-right">
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="font-weight:800;color:var(--accent-dark);font-size:15px">Detailed results</div>
-          <div style="font-size:13px;color:var(--muted)">Review per-question outcome, time used and score. Use the
-            badges to quickly spot errors and revise those topics.</div>
-
-          <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
-            <div style="font-size:13px;color:var(--muted)">Total Score</div>
-            <div class="score-badge" style="align-items:flex-start;padding:10px;border-radius:12px">
-              <div style="font-size:22px;font-weight:900" id="right-total">0</div>
-              <div style="font-size:12px;color:var(--muted);font-weight:700">Out of <span id="right-max">0</span></div>
-            </div>
-            <div style="font-size:13px;color:var(--muted)">Duration</div>
-            <div style="font-weight:800" id="right-duration">00:00</div>
-          </div>
-
-          <div style="margin-top:auto">
-            <button id="close-detail-bottom" class="btn-secondary" style="width:100%">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Confirmation modal for submit -->
-  <div id="confirm-submit-modal" role="dialog" aria-modal="true">
-    <div class="confirm-card" role="document">
-      <div class="confirm-row">
-        <div class="confirm-title">Confirm submission</div>
-        <div style="font-size:12px;color:var(--muted)">Make sure you've reviewed your answers</div>
-      </div>
-      <div class="confirm-stats" id="confirm-stats">
-        <div class="confirm-stat" id="confirm-attempted">Attempted: 0</div>
-        <div class="confirm-stat" id="confirm-left">Left: 0</div>
-        <div class="confirm-stat" id="confirm-remaining">Time left: 00:00:00</div>
-      </div>
-
-      <div style="font-size:13px;color:var(--muted);">If you proceed, your attempt will be submitted and saved.
-        Reattempts are not permitted for this mock.</div>
-
-      <div class="confirm-actions">
-        <button id="confirm-submit-no" class="btn-secondary">Cancel</button>
-        <button id="confirm-submit-yes" class="btn-danger">Confirm submit</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- FULLSCREEN LOGIN (no demo) -->
-  <div id="login-screen" class="login-screen" role="dialog" aria-modal="true">
-    <div class="px-login-fullscreen">
-      <div class="px-login-top">
-        <img src="favicon.png" alt="PX logo">
-        <h1>PROYAX - Assam CEE 2026 Mock Test Series</h1>
-      </div>
-
-      <div class="px-login-center">
-        <div class="px-login-formwrap">
-          <div class="px-login-column">
-            <div style="display:flex;align-items:flex-start;gap:12px;">
-              <div style="font-weight:900;font-size:18px;color:var(--accent-dark)">Welcome Back Aspirant!</div>
             </div>
 
-            <input id="login-username" class="px-input" placeholder="Username" autocomplete="username" />
-            <input id="login-password" class="px-input" placeholder="Password" type="password"
-              autocomplete="current-password" />
+            <div class="question-card" id="question-card">
+                <div class="question-top">
+                    <div>
+                        <div class="qno" id="qno">Question 1</div>
+                        <div class="meta-sm" id="qtime">Time spent: 00:00</div>
+                    </div>
+                    <div class="meta-sm" id="qstatus">Status: Unseen</div>
+                </div>
 
-            <div class="px-actions">
-              <div style="display:flex;gap:8px;align-items:center;">
-                <button id="login-btn" class="px-btn primary">Login</button>
-              </div>
-              <div style="font-size:13px;color:var(--muted);align-self:center">New here? <a href="#"
-                  style="color:#cd6a1b">Contact Admins for new registration</a></div>
+                <!-- SHOW RULES & DASHBOARD HELP BEFORE START -->
+                <div class="question" id="question">
+                    <div class="rules" id="rules-block">
+                        <h3>Rules</h3>
+                        <ul>
+                            <li>+4 for a correct answer</li>
+                            <li>-1 for a wrong answer</li>
+                            <li>0 for unanswered questions</li>
+                            <li>Only one attempt allowed per mock — reattempts are not permitted</li>
+                            <li>Use <strong>Mark</strong> to flag questions for review and submit when done</li>
+                        </ul>
+
+                        <h3 style="margin-top:10px">Dashboard — quick guide</h3>
+                        <ul>
+                            <li>Timer (top-right): shows elapsed time for your current attempt.</li>
+                            <li>Question palette (right): jump to any question in the section; colored badges show
+                                answered/marked
+                                status.</li>
+                            <li>Controls (bottom): <strong>Prev/Next</strong> to navigate, <strong>Mark</strong> to
+                                flag, and
+                                <strong>Submit</strong> to finish.
+                            </li>
+                            <li>Results: after submission you can view per-question outcome, time used and summary
+                                analytics in the
+                                "Results" window.</li>
+                        </ul>
+
+                        <div class="muted">When you're ready, click <strong>Start</strong> to begin the mock. Good luck!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="options" id="options"></div>
             </div>
 
-            <div id="login-error" class="px-help" aria-live="polite"></div>
-          </div>
-
-          <div class="px-login-visual">
-            <div
-              style="width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;background:linear-gradient(135deg,#fff1e6,#fff8f0);color:#cd6a1b">
-              PROYAX</div>
-            <div style="font-weight:800;color:#cd6a1b;font-size:16px">CEE Mock Test Series 2026</div>
-            <div style="font-size:13px;color:var(--muted);text-align:center">Take comprehensive CEE mock tests, track
-              your performance with detailed analytics, identify mistakes with precision, and strengthen your weak areas
-              systematically — so you can improve faster and score higher with confidence.</div>
-          </div>
+            <div class="controls">
+                <button class="btn-secondary" id="mark-review">Mark</button>
+                <!-- ADDED CLEAR BUTTON -->
+                <button class="btn-secondary" id="clear-btn">Clear</button>
+                <button class="btn-secondary" id="prev-btn">Prev</button>
+                <button class="btn-primary" id="next-btn">Next</button>
+                <button class="btn-danger" id="submit-btn">Submit</button>
+            </div>
         </div>
-      </div>
+
+        <div class="side" aria-hidden="true">
+            <h3>Choose Section</h3>
+            <button id="info-btn" class="info-btn" title="About developers">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
+  10-4.48 10-10S17.52 2 12 2zm0 4a1.25 1.25 0 110 2.5A1.25 1.25 0 0112 6zm1.5 12h-3v-2h1v-4h-1V10h3v6h1v2z" />
+                </svg>
+
+            </button>
+            <div class="seg">
+                <button id="btn-phy" class="active">Physics</button>
+                <button id="btn-chem">Chemistry</button>
+                <button id="btn-math">Mathematics</button>
+            </div>
+
+            <div id="section-picker" class="picker" aria-label="Question picker"></div>
+
+            <div class="legend">
+                <div style="font-weight:700;margin-top:6px">Legend</div>
+                <div class="item"><span class="sw" style="background:#fff3e0;border:1px solid #ffe4cf"></span> Unseen /
+                    viewed
+                </div>
+                <div class="item"><span class="sw" style="background:#ecfdf5;border:1px solid #bbf7d0"></span> Answered
+                </div>
+                <div class="item"><span class="sw" style="background:#eef2ff;border:1px solid #c7d2fe"></span> Marked
+                </div>
+            </div>
+
+            <div style="margin-top:auto;font-size:13px;color:var(--muted)">Controls</div>
+            <div style="height:6px"></div>
+        </div>
     </div>
-  </div>
-  <div id="dev-info-modal">
-    <div class="dev-info-card">
-      <h3>Developer Info</h3>
-      <p><strong>Platform:</strong> PROYAX Assam</p>
-      <p><strong>Developed by:</strong>Team PROYAX</p>
-      <p><strong>Purpose:</strong> Assam CEE 2026 Mock Test & Analytics</p>
-      <p style="font-size:12px;color:#6b7280">
-        Built for students, by students ❤️
-      </p>
 
-      <div style="text-align:right;margin-top:10px">
-        <button id="close-dev-info" class="btn-secondary">Close</button>
-      </div>
+    <!-- START MODAL, HISTORY, DETAIL (same as before) -->
+    <div class="overlay start-modal" id="start-modal" aria-hidden="true">
+        <div class="start-card" role="dialog" aria-modal="true" aria-labelledby="start-title">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <h3 id="start-title" style="margin:0;font-size:14px">Select Mock</h3>
+                <button id="close-mocks" class="btn-secondary">Close</button>
+            </div>
+            <div id="mocks-container"
+                style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:10px">
+            </div>
+        </div>
     </div>
-  </div>
-
-
-  <!-- Firebase (optional) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
-  <script>
-    /* =========================
-       Config & helpers
-       ========================= */
-    const firebaseConfig = {
-      apiKey: "AIzaSyBOVl1hdmprJXpgdN_sNTO3FsNePD_zNZY",
-      authDomain: "aahes-cee-cutoffs.firebaseapp.com",
-      projectId: "aahes-cee-cutoffs"
-    };
-    let db = null;
-    try { firebase.initializeApp(firebaseConfig); db = firebase.firestore(); } catch (e) { db = null; console.warn('firebase not configured', e); }
-
-    // DOM refs
-    const appEl = document.getElementById('app');
-    const loginScreen = document.getElementById('login-screen');
-    const loginUsername = document.getElementById('login-username');
-    const loginPassword = document.getElementById('login-password');
-    const loginBtn = document.getElementById('login-btn');
-    const loginError = document.getElementById('login-error');
-
-    const qno = document.getElementById('qno');
-    const questionEl = document.getElementById('question');
-    const optionsEl = document.getElementById('options');
-    const qtime = document.getElementById('qtime');
-    const qstatus = document.getElementById('qstatus');
-    const globalTimer = document.getElementById('global-timer');
-
-    // user badge DOM refs (new)
-    const userBadge = document.getElementById('user-badge');
-    const userNameEl = document.getElementById('user-name');
-    const userAvatarEl = document.getElementById('user-avatar');
-
-    const openStart = document.getElementById('open-start');
-    const startModal = document.getElementById('start-modal');
-    const mocksContainer = document.getElementById('mocks-container');
-    const closeMocks = document.getElementById('close-mocks');
-
-    const nextBtn = document.getElementById('next-btn');
-    const prevBtn = document.getElementById('prev-btn');
-    const markReviewBtn = document.getElementById('mark-review');
-    const submitBtn = document.getElementById('submit-btn');
-    // CLEAR button ref
-    const clearBtn = document.getElementById('clear-btn');
-
-    const resultsBtn = document.getElementById('results-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-
-    const historyOverlay = document.getElementById('history-overlay');
-    const historyGrid = document.getElementById('history-grid');
-    const closeHistory = document.getElementById('close-history');
-
-    const detailOverlay = document.getElementById('detail-overlay');
-    const closeDetail = document.getElementById('close-detail');
-
-    // Confirm modal refs
-    const confirmModal = document.getElementById('confirm-submit-modal');
-    const confirmAttempted = document.getElementById('confirm-attempted');
-    const confirmLeft = document.getElementById('confirm-left');
-    const confirmRemaining = document.getElementById('confirm-remaining');
-    const confirmYes = document.getElementById('confirm-submit-yes');
-    const confirmNo = document.getElementById('confirm-submit-no');
-
-    // state
-    let questions = [];
-    let responses = [];
-    let current = 0;
-    let questionTimers = [];
-    let startTime = null;
-    let globalTimerInterval = null;
-    let testStarted = false;
-    let autoSubmitTimer = null; // kept for compatibility (not used for countdown auto-submit)
-    let submittedAlready = false;
-    let currentUser = null;
-    let mocksList = [];
-    let currentMockId = null;
-    let sectionMap = null;
-    let totalDurationSec = 0; // <-- total test duration in seconds (used for countdown)
-
-    // utilities
-    function fmtH(sec) { const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60; return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; }
-    function fmtMS(sec) { const m = Math.floor(sec / 60), s = sec % 60; return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; }
-    function letterToIndex(letter) {
-      if (letter == null) return null;
-      const l = String(letter).trim().toUpperCase();
-      if (l === 'A') return 0; if (l === 'B') return 1; if (l === 'C') return 2; if (l === 'D') return 3;
-      return null;
-    }
-
-    function normalizeImgUrl(u) {
-      if (!u) return null;
-      const s = String(u).trim();
-      if (!s) return null;
-      if (/^https?:\/\//i.test(s)) return s;
-      if (/^\/\//.test(s)) return location.protocol + s;
-      if (s.startsWith('/')) return s;
-      return './' + s.replace(/^\.?\//, '');
-    }
-
-    function findImageFromDoc(obj) {
-      if (!obj) return null;
-      const keys = ['img', 'image', 'imageUrl', 'image_url', 'image_link', 'imageLink', 'img_p', 'img_p1', 'img1', 'url', 'link'];
-      for (const k of keys) {
-        if (Object.prototype.hasOwnProperty.call(obj, k) && obj[k] != null && String(obj[k]).trim() !== '') return normalizeImgUrl(obj[k]);
-      }
-      for (const k of Object.keys(obj)) {
-        if (/img/i.test(k) || /image/i.test(k)) {
-          const v = obj[k];
-          if (v && String(v).trim() !== '') return normalizeImgUrl(v);
-        }
-      }
-      return null;
-    }
-
-    function sampleBank() {
-      const secs = ['Physics', 'Chemistry', 'Mathematics']; const out = [];
-      secs.forEach(sec => { for (let i = 1; i <= 20; i++) { out.push({ id: sec[0] + i, section: sec, text: `Sample ${sec} question ${i}`, options: ['A', 'B', 'C', 'D'], answerIndex: Math.floor(Math.random() * 4), img: null }); } });
-      return out;
-    }
-
-    function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }
-
-    // new helper: format Date (date-only). Handles Firestore Timestamp and ISO/string fallback
-    function formatDateOnly(field) {
-      if (!field) return '-';
-      try {
-        // Firestore Timestamp object
-        if (field.toDate && typeof field.toDate === 'function') {
-          const d = field.toDate();
-          return d.toLocaleDateString();
-        }
-        // ISO string or Date-like
-        const dt = new Date(field);
-        if (!isNaN(dt.getTime())) return dt.toLocaleDateString();
-        // fallback to raw string trimmed (show only date part if includes T)
-        const s = String(field);
-        if (s.indexOf('T') > 0) return s.split('T')[0];
-        return s;
-      } catch (e) {
-        return String(field);
-      }
-    }
-
-    function findSyllabusFromDoc(m) {
-      // Try several common fields
-      if (!m) return '';
-      return (m.syllabus || m.syl || m.desc || m.description || m.notes || '');
-    }
-
-    // UI init
-    appEl.setAttribute('aria-hidden', 'true');
-    loginScreen.style.display = 'flex';
-    // ensure badge hidden by default
-    userBadge.style.display = 'none';
-    userNameEl.textContent = 'Not signed in';
-    userAvatarEl.textContent = 'P';
-    globalTimer.textContent = '00:00:00';
-
-    // login (no guest/demo option)
-    loginBtn.addEventListener('click', async () => {
-      loginError.textContent = '';
-      const u = (loginUsername.value || '').trim();
-      const p = (loginPassword.value || '');
-      if (!u || !p) { loginError.textContent = 'enter credentials'; return; }
-      if (!db) { loginError.textContent = 'db not configured'; return; }
-      loginError.textContent = 'checking...';
-      try {
-        const snap = await db.collection('users').where('username', '==', u).limit(1).get();
-        if (snap.empty) { loginError.textContent = 'user not found'; return; }
-        const data = snap.docs[0].data();
-        if (String(data.password) === String(p)) { currentUser = { username: data.username || u, name: data.name || u }; onLoggedIn(); } else { loginError.textContent = 'invalid password'; }
-      } catch (e) { console.error(e); loginError.textContent = 'login failed'; }
-    });
-
-    function onLoggedIn() {
-      // show attractive badge
-      userNameEl.textContent = currentUser.name || currentUser.username || 'User';
-      userAvatarEl.textContent = (currentUser.name && currentUser.name[0]) ? currentUser.name[0].toUpperCase() : (currentUser.username ? currentUser.username[0].toUpperCase() : 'U');
-      userBadge.style.display = 'flex';
-
-      // hide login, show app controls
-      loginScreen.style.display = 'none';
-      appEl.setAttribute('aria-hidden', 'false');
-      resultsBtn.style.display = 'inline-block';
-      openStart.style.display = 'inline-block';
-      logoutBtn.style.display = 'inline-block';
-      loadMocks();
-    }
-
-    logoutBtn.addEventListener('click', () => {
-      if (testStarted && !submittedAlready && !confirm('Discard running test?')) return;
-      currentUser = null;
-      userBadge.style.display = 'none';
-      userNameEl.textContent = 'Not signed in';
-      userAvatarEl.textContent = 'P';
-      openStart.style.display = 'inline-block'; resultsBtn.style.display = 'none'; openStart.style.display = 'none'; logoutBtn.style.display = 'none';
-      testStarted = false; submittedAlready = false; if (autoSubmitTimer) clearTimeout(autoSubmitTimer);
-      stopGlobalTimer();
-      totalDurationSec = 0;
-      globalTimer.textContent = '00:00:00';
-      questions = sampleBank(); responses = questions.map(() => ({ choiceIndex: null, marked: false, timeUsed: 0, viewed: false })); questionTimers = questions.map(() => null); current = 0; renderQuestion(); renderPicker('Physics');
-      loginScreen.style.display = 'flex';
-      appEl.setAttribute('aria-hidden', 'true');
-      currentMockId = null;
-    });
-
-    /* ========== mocks ========== */
-    async function hasAttempted(mockId) {
-      if (!db || !currentUser) return false;
-      try {
-        const snap = await db.collection('res')
-          .where('username', '==', currentUser.username)
-          .where('mockId', '==', mockId)
-          .limit(1)
-          .get();
-        return !snap.empty;
-      } catch (e) { console.warn('hasAttempted failed', e); return false; }
-    }
-
-    async function loadMocks() {
-      mocksContainer.innerHTML = `<div style="padding:8px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted') || '#666'}">Loading...</div>`;
-      if (!db) {
-        mocksList = [
-          {
-            id: 'local-1', name: 'Mock 1', time: '120', qns: '60', syllabus: 'Full CEE', active: 'yes', date: new Date().toISOString(),
-            img_p1: 'https://via.placeholder.com/600x360?text=P1', ans_p1: 'A',
-            img_c1: 'https://via.placeholder.com/600x360?text=C1', ans_c1: 'B',
-            img_m1: 'https://via.placeholder.com/600x360?text=M1', ans_m1: 'C'
-          },
-          { id: 'local-2', name: 'Mock 2 (Archived)', time: '90', qns: '30', syllabus: 'Physics only', active: 'no', date: null }
-        ];
-        await renderMocks();
-        return;
-      }
-      try {
-        const snap = await db.collection('mocks').orderBy('name').get();
-        mocksList = snap.docs.map(d => Object.assign({ id: d.id }, d.data()));
-      } catch (e) { console.warn(e); mocksList = [{ id: 'err', name: 'No mocks', syllabus: 'See console', active: 'no' }]; }
-      await renderMocks();
-    }
-
-    async function renderMocks() {
-      mocksContainer.innerHTML = '';
-      for (const m of mocksList) {
-        const isActive = (typeof m.active === 'string') ? (m.active.toLowerCase() === 'yes' || m.active.toLowerCase() === 'true') : !!m.active;
-        let attempted = false;
-        if (currentUser && db) {
-          try { attempted = await hasAttempted(m.id); } catch (e) { attempted = false; }
-        }
-
-        const card = document.createElement('div');
-        card.className = 'mock-card' + ((!isActive || attempted) ? ' inactive' : '');
-
-        // compute display values
-        const durationText = m.duration || m.time || '-';
-        const qCountText = m.questionCount || m.qns || '-';
-        // syllabus: check common fields (syl, syllabus, desc)
-        const syllabusText = escapeHtml(findSyllabusFromDoc(m));
-        // date-only formatting helper (handles Firestore Timestamp)
-        const dateText = (m.date) ? escapeHtml(formatDateOnly(m.date)) : '-';
-
-        // Show name, duration & qns, then add date (date only) and syllabus on the card
-        card.innerHTML = `
-          <div style="font-weight:800">${escapeHtml(m.name || m.id)}</div>
-          <div style="font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted') || '#666'}">
-            ${durationText} min • ${qCountText} Qs
-          </div>
-          <div style="font-size:12px;margin-top:6px;color:#222"><strong>Date:</strong> ${dateText}</div>
-          <div style="font-size:12px;margin-top:6px;color:#222"><strong>Syllabus:</strong> ${syllabusText || '-'}</div>
-        `;
-
-        const btn = document.createElement('button');
-        btn.style.marginTop = '8px';
-
-        if (!isActive) {
-          btn.className = 'btn-secondary';
-          btn.textContent = 'Not available';
-          btn.disabled = true;
-        } else if (attempted) {
-          btn.className = 'btn-secondary';
-          btn.textContent = 'Attempted';
-          btn.disabled = true;
-        } else {
-          btn.className = 'btn-primary';
-          btn.textContent = 'Start';
-          btn.addEventListener('click', () => { startModal.style.display = 'none'; startMock(m); });
-        }
-
-        card.appendChild(btn);
-
-        if (m.active !== undefined || attempted) {
-          const lbl = document.createElement('div');
-          lbl.style.fontSize = '11px';
-          lbl.style.fontWeight = '800';
-          lbl.style.marginTop = '6px';
-          if (attempted) { lbl.style.color = '#b37b4a'; lbl.textContent = 'Attempted'; }
-          else lbl.style.color = isActive ? '#0b9a6b' : '#b37b4a';
-          if (!attempted) lbl.textContent = isActive ? 'Active' : 'Inactive';
-          card.appendChild(lbl);
-        }
-
-        mocksContainer.appendChild(card);
-      }
-    }
-
-    closeMocks.addEventListener('click', () => { startModal.style.display = 'none'; });
-
-    /* ========== start mock ========== */
-    async function startMock(mock) {
-      if (!mock) return;
-
-      const isActive =
-        typeof mock.active === 'string'
-          ? mock.active.toLowerCase() === 'true' || mock.active.toLowerCase() === 'yes'
-          : !!mock.active;
-
-      if (!isActive) {
-        alert('This mock is not available.');
-        return;
-      }
-
-      if (currentUser && db) {
-        const already = await hasAttempted(mock.id);
-        if (already) {
-          alert('You have already attempted this mock.');
-          await loadMocks();
-          return;
-        }
-      }
-
-      let built = [];
-
-      /* ======================================================
-         1️⃣ TRY SUBCOLLECTION (NO CHANGE – EXISTING LOGIC)
-      ====================================================== */
-      if (db) {
-        try {
-          const snap = await db
-            .collection('mocks')
-            .doc(mock.id)
-            .collection('questions')
-            .orderBy('index')
-            .get();
-
-          if (!snap.empty) {
-            built = snap.docs.map((d, i) => {
-              const q = d.data();
-              return {
-                id: d.id,
-                section: q.section,
-                text: q.text || null,
-                img: q.img || q.image || q.imageUrl || null,
-                options: ['A', 'B', 'C', 'D'],
-                answerIndex: letterToIndex(q.ans || q.answer || q.correct)
-              };
-            });
-          }
-        } catch (e) {
-          console.warn('Subcollection fetch failed', e);
-        }
-      }
-
-      /* ======================================================
-         🔥 2️⃣ NEW: SUPPORT SUBJECT-WISE QUESTIONS OBJECT
-         (THIS MATCHES YOUR SCREENSHOT EXACTLY)
-      ====================================================== */
-      if (!built.length && mock.questions && typeof mock.questions === 'object') {
-        const subjects = ['Physics', 'Chemistry', 'Mathematics'];
-
-        subjects.forEach(subject => {
-          const arr = mock.questions[subject];
-          if (Array.isArray(arr)) {
-            arr.forEach((q, i) => {
-              built.push({
-                id: `${subject[0]}${i + 1}`,
-                section: subject,
-                text: null,
-                img: q.img || null,
-                options: ['A', 'B', 'C', 'D'],
-                answerIndex: letterToIndex(q.ans)
-              });
-            });
-          }
-        });
-      }
-
-      /* ======================================================
-         3️⃣ OLD FALLBACK (UNCHANGED)
-      ====================================================== */
-      if (!built.length) {
-        built = sampleBank();
-      }
-
-      /* ======================================================
-         FINAL NORMALIZATION (UNCHANGED)
-      ====================================================== */
-      questions = built.map((q, i) => ({
-        id: q.id || `Q${i + 1}`,
-        section: q.section,
-        text: q.text,
-        img: normalizeImgUrl(q.img),
-        options: q.options || ['A', 'B', 'C', 'D'],
-        answerIndex: q.answerIndex
-      }));
-
-      // build section map (UNCHANGED)
-      sectionMap = {};
-      questions.forEach((q, i) => {
-        if (!sectionMap[q.section]) sectionMap[q.section] = [];
-        sectionMap[q.section].push(i);
-      });
-
-      responses = questions.map(() => ({
-        choiceIndex: null,
-        markedReview: false,
-        timeSpentSec: 0,
-        viewed: false
-      }));
-
-      questionTimers = questions.map(() => null);
-      current = 0;
-
-      const durationMin = Number(mock.duration) || 120;
-      totalDurationSec = durationMin * 60;
-
-      startTime = Date.now();
-      testStarted = true;
-      submittedAlready = false;
-
-      startGlobalTimer();
-      const firstSection = updateSectionTabs();
-      if (firstSection) {
-        setActiveSection(firstSection);
-      }
-
-
-      currentMockId = mock.id;
-      openStart.style.display = 'none';
-    }
-
-
-    /* ========== render / timers ========== */
-    function startGlobalTimer() {
-      if (globalTimerInterval) clearInterval(globalTimerInterval);
-      // immediately update display
-      function updateOnce() {
-        if (!startTime || typeof totalDurationSec !== 'number' || totalDurationSec <= 0) {
-          globalTimer.textContent = '00:00:00';
-          return;
-        }
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        let remaining = totalDurationSec - elapsed;
-        if (remaining < 0) remaining = 0;
-        globalTimer.textContent = fmtH(remaining);
-        if (remaining <= 0) {
-          // stop timer, auto submit
-          clearInterval(globalTimerInterval);
-          globalTimerInterval = null;
-          // ensure we only auto-submit once
-          if (!submittedAlready) {
-            submitTest(true).catch(() => { /* ignore */ });
-          }
-        }
-      }
-      updateOnce();
-      globalTimerInterval = setInterval(updateOnce, 500);
-    }
-    function stopGlobalTimer() { if (globalTimerInterval) { clearInterval(globalTimerInterval); globalTimerInterval = null; } }
-
-    // Helper functions that now use sectionMap
-    function getSectionOfIndex(idx) { return (questions[idx] && questions[idx].section) ? questions[idx].section : null; }
-
-    function getNumberWithinSection(idx) {
-      const sec = getSectionOfIndex(idx);
-      if (!sec || !sectionMap || !sectionMap[sec]) return null;
-      return sectionMap[sec].indexOf(idx) + 1; // 1-based
-    }
-
-    function getGlobalIndex(section, num) {
-      if (!sectionMap || !sectionMap[section]) return null;
-      if (num - 1 < 0 || num - 1 >= sectionMap[section].length) return null;
-      return sectionMap[section][num - 1];
-    }
-
-    function firstIndexOfSection(section) {
-      if (!sectionMap || !sectionMap[section] || sectionMap[section].length === 0) return 0;
-      return sectionMap[section][0];
-    }
-
-    function renderQuestion() {
-      // If test not started -> show rules block (same content as initial HTML)
-      if (!testStarted) {
-        const rulesHTML = `
-          <div class="rules">
-            <h3>Rules</h3>
-            <ul>
-              <li>+4 for a correct answer</li>
-              <li>-1 for a wrong answer</li>
-              <li>0 for unanswered questions</li>
-              <li>Only one attempt allowed per mock — reattempts are not permitted</li>
-              <li>Use <strong>Mark</strong> to flag questions for review and submit when done</li>
-            </ul>
-
-            <h3 style="margin-top:10px">Dashboard — quick guide</h3>
-            <ul>
-              <li>Timer (top-right): shows elapsed time for your current attempt.</li>
-              <li>Question palette (right): jump to any question in the section; colored badges show answered/marked status.</li>
-              <li>Controls (bottom): <strong>Prev/Next</strong> to navigate, <strong>Mark</strong> to flag, and <strong>Submit</strong> to finish.</li>
-              <li>Results: after submission you can view per-question outcome, time used and summary analytics in the "Results" window.</li>
-            </ul>
-
-            <div class="muted">When you're ready, click <strong>Start</strong> to begin the mock. Good luck!</div>
-          </div>
-        `;
-        questionEl.innerHTML = rulesHTML;
-        optionsEl.innerHTML = '';
-        qno.textContent = 'Question 1';
-        qtime.textContent = 'Time spent: 00:00';
-        qstatus.textContent = 'Status: Unseen';
-        return;
-      }
-
-      // mark current as viewed when rendering it
-      if (responses[current]) responses[current].viewed = true;
-
-      const q = questions[current];
-      qno.textContent = `${q.section} • Q ${getNumberWithinSection(current) || 1}`;
-
-      optionsEl.innerHTML = '';
-      questionEl.innerHTML = '';
-
-      if (q.img) {
-        const im = document.createElement('img');
-        im.src = q.img;
-        im.alt = q.id || 'question image';
-        im.onerror = function () {
-          console.warn('Image load failed for', q.img);
-          this.onerror = null;
-          this.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="360"><rect width="100%" height="100%" fill="#fff4ed"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#b37b4a" font-family="Arial" font-size="20">Image failed to load</text></svg>`);
-        };
-        questionEl.appendChild(im);
-      } else if (q.text) {
-        const p = document.createElement('div');
-        p.textContent = q.text;
-        p.style.color = '#0f172a';
-        questionEl.appendChild(p);
-      } else {
-        const p = document.createElement('div');
-        p.textContent = 'No image available for this question';
-        p.style.color = '#b37b4a';
-        questionEl.appendChild(p);
-      }
-
-      qtime.textContent = 'Time spent: ' + fmtMS(responses[current].timeSpentSec || 0);
-      const resp = responses[current];
-      qstatus.textContent = resp.markedReview ? 'Status: Marked' : (resp.choiceIndex === null ? 'Status: Unseen' : 'Status: Answered');
-
-      const opts = ['A', 'B', 'C', 'D'];
-      opts.forEach((lab, i) => {
-        const d = document.createElement('div');
-        d.className = 'opt' + (resp.choiceIndex === i ? ' selected' : '');
-        d.textContent = lab;
-        d.addEventListener('click', () => {
-          recordQuestionTimeStop(current);
-          responses[current].choiceIndex = i;
-          responses[current].markedReview = false;
-          renderQuestion();
-          renderPicker(getSectionOfIndex(current));
-          recordQuestionTimeStart(current);
-        });
-        optionsEl.appendChild(d);
-      });
-
-      questionTimers[current] = questionTimers[current] || Date.now();
-    }
-
-    function renderPicker(section) {
-      const picker = document.getElementById('section-picker'); picker.innerHTML = '';
-      const list = (sectionMap && sectionMap[section]) ? sectionMap[section] : [];
-      for (let i = 0; i < list.length; i++) {
-        const idx = list[i];
-        if (idx === undefined) continue;
-        const st = responses[idx] || { choiceIndex: null, markedReview: false, viewed: false };
-        // priority: marked -> answered -> viewed -> default
-        let cls = 'qbtn';
-        if (st.markedReview) cls += ' review';
-        else if (st.choiceIndex !== null) cls += ' answered';
-        else if (st.viewed) cls += ' viewed';
-
-        const el = document.createElement('div'); el.className = cls;
-        el.textContent = i + 1;
-        el.title = `Q ${i + 1}`;
-        el.addEventListener('click', () => {
-          // stop time for previous
-          if (testStarted) recordQuestionTimeStop(current);
-          // set current and mark viewed immediately so UI shows ribbon even before renderQuestion sets it
-          current = idx;
-          if (responses[current]) responses[current].viewed = true;
-          renderQuestion();
-          renderPicker(section);
-          // resume timer
-          if (testStarted) recordQuestionTimeStart(current);
-        });
-        picker.appendChild(el);
-      }
-    }
-
-    function firstIndexOfSection(section) {
-      if (!sectionMap || !sectionMap[section] || sectionMap[section].length === 0) return 0;
-      return sectionMap[section][0];
-    }
-
-    document.getElementById('btn-phy').addEventListener('click', () => setActiveSection('Physics'));
-    document.getElementById('btn-chem').addEventListener('click', () => setActiveSection('Chemistry'));
-    document.getElementById('btn-math').addEventListener('click', () => setActiveSection('Mathematics'));
-
-    function setActiveSection(section) {
-      document.getElementById('btn-phy').classList.toggle('active', section === 'Physics');
-      document.getElementById('btn-chem').classList.toggle('active', section === 'Chemistry');
-      document.getElementById('btn-math').classList.toggle('active', section === 'Mathematics');
-
-      if (typeof recordQuestionTimeStop === 'function' && testStarted) {
-        recordQuestionTimeStop(current);
-      }
-
-      const idx = firstIndexOfSection(section);
-      if (typeof idx === 'number' && idx >= 0 && idx < questions.length) {
-        current = idx;
-      }
-
-      // mark viewed when switching into section (we render question which sets viewed)
-      renderQuestion();
-      renderPicker(section);
-    }
-
-    nextBtn.addEventListener('click', () => { if (!testStarted) return; recordQuestionTimeStop(current); current = Math.min(questions.length - 1, current + 1); renderQuestion(); renderPicker(getSectionOfIndex(current)); });
-    prevBtn.addEventListener('click', () => { if (!testStarted) return; recordQuestionTimeStop(current); current = Math.max(0, current - 1); renderQuestion(); renderPicker(getSectionOfIndex(current)); });
-    markReviewBtn.addEventListener('click', () => { if (!testStarted) return; responses[current].markedReview = !responses[current].markedReview; renderQuestion(); renderPicker(getSectionOfIndex(current)); });
-
-    // CLEAR button behaviour: deselect current option and remove mark
-    clearBtn.addEventListener('click', () => {
-      if (!testStarted) return;
-      // stop current timer (we keep time already spent)
-      recordQuestionTimeStop(current);
-      // clear selection and unmark
-      responses[current].choiceIndex = null;
-      responses[current].markedReview = false;
-      // update UI
-      renderQuestion();
-      renderPicker(getSectionOfIndex(current));
-      // resume timing for this question
-      recordQuestionTimeStart(current);
-    });
-
-    function recordQuestionTimeStart(idx) { if (!questionTimers[idx]) questionTimers[idx] = Date.now(); }
-    function recordQuestionTimeStop(idx) { if (questionTimers[idx]) { const delta = Math.floor((Date.now() - questionTimers[idx]) / 1000); responses[idx].timeSpentSec = (responses[idx].timeSpentSec || 0) + delta; questionTimers[idx] = null; qtime.textContent = 'Time spent: ' + fmtMS(responses[idx].timeSpentSec || 0); } }
-
-    // Updated Submit behavior: show confirmation modal with stats
-    submitBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (!testStarted || submittedAlready) return;
-      showSubmitConfirm();
-    });
-
-    function showSubmitConfirm() {
-      if (!testStarted || submittedAlready) return;
-      const attempted = responses.filter(r => r.choiceIndex !== null).length;
-      const left = responses.length - attempted;
-      let remaining = 0;
-      if (startTime && typeof totalDurationSec === 'number') {
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        remaining = Math.max(0, totalDurationSec - elapsed);
-      }
-      confirmAttempted.textContent = `Attempted: ${attempted}`;
-      confirmLeft.textContent = `Left: ${left}`;
-      confirmRemaining.textContent = `Time left: ${fmtH(remaining)}`;
-      confirmModal.style.display = 'flex';
-    }
-
-    confirmNo.addEventListener('click', () => { confirmModal.style.display = 'none'; });
-    // Confirm yes -> proceed to submit. If there are marked questions, warn first in modal flow.
-    confirmYes.addEventListener('click', async () => {
-      confirmModal.style.display = 'none';
-      if (!testStarted || submittedAlready) return;
-      // if there are any marked questions, confirm again (small inline check)
-      const marked = responses.map((r, i) => r.markedReview ? i : -1).filter(x => x >= 0);
-      if (marked.length) {
-        if (!confirm(`You have ${marked.length} marked. Submit anyway?`)) return;
-      }
-      await submitTest();
-    });
-
-    async function submitTest(isAuto = false) {
-      if (!testStarted || submittedAlready) return;
-      submittedAlready = true;
-      questionTimers.forEach((t, i) => { if (t) recordQuestionTimeStop(i); });
-      stopGlobalTimer();
-      totalDurationSec = 0;
-      globalTimer.textContent = '00:00:00';
-      const { total, per } = computeScore();
-
-      const result = {
-        username: currentUser ? currentUser.username : 'anon',
-        name: currentUser ? currentUser.name : 'anon',
-        mockId: currentMockId || null,
-        score: total,
-        date: (firebase && firebase.firestore) ? firebase.firestore.FieldValue.serverTimestamp() : new Date().toISOString(),
-        durationSec: Math.floor((Date.now() - startTime) / 1000),
-        autoSubmitted: !!isAuto,
-        perQuestion: questions.map((q, i) => ({
-          qid: q.id,
-          qidNormalized: (q.qid || q.id || '').toString(),
-          section: q.section,
-          imageUrl: q.img || q.imageUrl || q.imgUrl || null,
-          selectedIndex: responses[i].choiceIndex,
-          correctIndex: q.answerIndex,
-          score: per[i],
-          timeUsedSec: responses[i].timeSpentSec,
-          markedReview: responses[i].markedReview
-        }))
-      };
-
-      if (db) { try { await db.collection('res').add(result); } catch (e) { console.warn('save failed', e); } } else { console.log('would save', result); }
-
-      responses = questions.map(() => ({ choiceIndex: null, markedReview: false, timeSpentSec: 0, viewed: false }));
-      questionTimers = questions.map(() => null);
-      current = 0; submittedAlready = false; testStarted = false; startTime = null; if (autoSubmitTimer) clearTimeout(autoSubmitTimer);
-      renderQuestion(); renderPicker(getSectionOfIndex(current));
-
-      openStart.style.display = 'inline-block';
-      currentMockId = null;
-
-      if (currentUser) await loadMocks();
-
-      alert('Submitted. Results saved.');
-    }
-
-    function computeScore() {
-      const per = responses.map((r, i) => {
-        if (r.choiceIndex === null) return 0;
-        const corr = questions[i].answerIndex;
-        if (corr === null || corr === undefined) return 0;
-        return r.choiceIndex === corr ? 4 : -1;
-      });
-      const total = per.reduce((a, b) => a + b, 0);
-      return { total, per };
-    }
-
-    /* ========== history & details ========== */
-    resultsBtn.addEventListener('click', async () => {
-      historyOverlay.style.display = 'flex'; historyGrid.innerHTML = '';
-      if (!db) { historyGrid.innerHTML = '<div style="padding:8px">DB not configured</div>'; return; }
-      if (!currentUser) { historyGrid.innerHTML = '<div style="padding:8px">Login to view</div>'; return; }
-      try {
-        let snap = await db.collection('res').where('username', '==', currentUser.username).orderBy('date', 'desc').limit(100).get().catch(async () => { const alt = await db.collection('res').orderBy('date', 'desc').limit(200).get(); return { docs: alt.docs.filter(d => d.data().username === currentUser.username) }; });
-        if (!snap || snap.docs.length === 0) { historyGrid.innerHTML = '<div style="padding:8px">No submissions</div>'; return; }
-        snap.docs.forEach(doc => {
-          const d = doc.data();
-          const card = document.createElement('div'); card.className = 'history-card';
-          card.innerHTML = `<div style="font-weight:800">${d.name || d.username}</div><div style="font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')}">${d.score} • ${d.perQuestion ? d.perQuestion.length : '-'} Qs</div>`;
-          const v = document.createElement('button'); v.className = 'btn-secondary'; v.textContent = 'View'; v.style.marginTop = '6px'; v.addEventListener('click', async () => { const docf = await db.collection('res').doc(doc.id).get(); showDetailFromDoc(docf); });
-          card.appendChild(v);
-          historyGrid.appendChild(card);
-        });
-      } catch (e) { console.error(e); historyGrid.innerHTML = '<div style="padding:8px">Failed to load</div>'; }
-    });
-    closeHistory.addEventListener('click', () => historyOverlay.style.display = 'none');
-
-    // robust showDetailFromDoc — checks saved image first, then runtime questions[], then Firestore fallback
-    async function showDetailFromDoc(doc) {
-      // doc may be a firestore doc snapshot or a plain object
-      const d = doc && doc.data ? doc.data() : (doc || {});
-      document.getElementById('detail-title').textContent = `Submission — ${d.name || d.username || 'User'}`;
-      const savedText = d.date ? (d.date.toDate ? d.date.toDate().toLocaleString() : d.date) : '-';
-      document.getElementById('detail-sub').textContent = `Saved: ${savedText}`;
-
-      const scoreBadge = document.getElementById('detail-score');
-      if (scoreBadge) {
-        const big = scoreBadge.querySelector('.big');
-        if (big) big.textContent = d.score || 0;
-      }
-
-      const perQ = d.perQuestion || [];
-      const totalQs = perQ.length;
-      const maxScore = totalQs * 4;
-      document.getElementById('right-total').textContent = d.score || 0;
-      document.getElementById('right-max').textContent = maxScore;
-      document.getElementById('right-duration').textContent = (() => {
-        if (d.durationSec) {
-          const m = Math.floor(d.durationSec / 60), s = d.durationSec % 60;
-          return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-        }
-        return '-';
-      })();
-
-      // Compute overall correct/wrong/unanswered and subject-wise marks
-      let correct = 0, wrong = 0, unanswered = 0;
-      const subj = {}; // subj -> { correct, wrong, unanswered, positive, negative }
-      perQ.forEach(pq => {
-        const section = (pq.section || 'Unknown');
-        if (!subj[section]) subj[section] = { correct: 0, wrong: 0, unanswered: 0, positive: 0, negative: 0, net: 0 };
-        if (pq.selectedIndex == null) {
-          unanswered++;
-          subj[section].unanswered++;
-        } else if (pq.correctIndex != null && pq.selectedIndex === pq.correctIndex) {
-          correct++;
-          subj[section].correct++;
-          subj[section].positive += 4;
-        } else {
-          wrong++;
-          subj[section].wrong++;
-          subj[section].negative += 1;
-        }
-      });
-
-      // compute net for each subject and overall
-      let overallPositive = 0, overallNegative = 0;
-      Object.keys(subj).forEach(k => { subj[k].net = subj[k].positive - subj[k].negative; overallPositive += subj[k].positive; overallNegative += subj[k].negative; });
-
-      document.getElementById('stat-correct').textContent = correct;
-      document.getElementById('stat-wrong').textContent = wrong;
-      document.getElementById('stat-unanswered').textContent = unanswered;
-
-      // Update the progress bar as before
-      const percent = totalQs ? Math.round(((correct + wrong) / totalQs) * 100) : 0;
-      const pb = document.getElementById('progress-bar');
-      if (pb) pb.style.width = `${percent}%`;
-
-      // Remove old breakdown if present
-      let existingBreakdown = document.getElementById('subject-breakdown');
-      if (existingBreakdown) existingBreakdown.remove();
-
-      const leftCol = document.querySelector('.detail-left');
-      if (leftCol) {
-        const breakdown = document.createElement('div');
-        breakdown.id = 'subject-breakdown';
-        breakdown.style.display = 'flex';
-        breakdown.style.gap = '8px';
-        breakdown.style.flexWrap = 'wrap';
-        breakdown.style.marginTop = '10px';
-        breakdown.style.alignItems = 'center';
-
-        // overall summary
-        const overallDiv = document.createElement('div');
-        overallDiv.className = 'stat';
-        overallDiv.style.minWidth = '160px';
-        overallDiv.innerHTML = `<strong style="font-size:16px">${(overallPositive - overallNegative) || 0}</strong><span style="font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')}">Overall (net)</span>
-        <div style="margin-top:6px;font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')}">+${overallPositive} / -${overallNegative}</div>`;
-        breakdown.appendChild(overallDiv);
-
-        // per-subject cards (Physics, Chemistry, Mathematics kept in same order if present)
-        const prefer = ['Physics', 'Chemistry', 'Mathematics'];
-        const keys = [...prefer.filter(k => subj[k]), ...Object.keys(subj).filter(k => !prefer.includes(k))];
-
-        keys.forEach(k => {
-          const s = subj[k];
-          const card = document.createElement('div');
-          card.className = 'stat';
-          card.style.minWidth = '140px';
-          card.innerHTML = `<strong style="font-size:15px">${s.net}</strong><span style="font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')}">${escapeHtml(k)}</span>
-            <div style="margin-top:6px;font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')}">+${s.positive} / -${s.negative}</div>`;
-          breakdown.appendChild(card);
-        });
-
-        // insert the breakdown after the stats-row element
-        const statsRow = leftCol.querySelector('.stats-row');
-        if (statsRow && statsRow.parentNode) {
-          statsRow.parentNode.insertBefore(breakdown, statsRow.nextSibling);
-        } else {
-          leftCol.insertBefore(breakdown, leftCol.firstChild);
-        }
-      }
-
-      // Build per-question list and attach Preview (eye) button
-      const list = document.getElementById('perq-list');
-      list.innerHTML = '';
-      (d.perQuestion || []).forEach((pq, i) => {
-        const tr = document.createElement('div');
-        tr.className = 'perq-item';
-        const left = document.createElement('div');
-        left.className = 'perq-left';
-        left.textContent = i + 1;
-
-        const mid = document.createElement('div');
-        mid.className = 'perq-mid';
-        const qid = document.createElement('div');
-        qid.className = 'qid';
-        qid.textContent = pq.qid || '';
-
-        const selText = pq.selectedIndex == null ? '-' : String.fromCharCode(65 + pq.selectedIndex);
-        const corText = pq.correctIndex == null ? '-' : String.fromCharCode(65 + pq.correctIndex);
-
-        const selSpan = document.createElement('div');
-        selSpan.textContent = `Selected: ${selText}`;
-
-        const corSpan = document.createElement('div');
-        corSpan.textContent = `Correct: ${corText}`;
-
-        const timeSpan = document.createElement('div');
-        timeSpan.textContent = `Time: ${typeof pq.timeUsedSec === 'number' ? Math.floor(pq.timeUsedSec / 60) + ':' + String(pq.timeUsedSec % 60).padStart(2, '0') : '-'}`;
-
-        const scoreSpan = document.createElement('div');
-        scoreSpan.textContent = `Score: ${pq.score || 0}`;
-
-        // preview button (eye SVG)
-        const viewBtn = document.createElement('button');
-        viewBtn.className = 'btn secondary';
-        viewBtn.style.marginLeft = '8px';
-        viewBtn.title = 'View question image';
-        viewBtn.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg> View
-        `;
-        // on click: try to find image and open preview window
-        viewBtn.addEventListener('click', async () => {
-          const qidVal = pq.qid || pq.qidNormalized || '';
-          // 1) check image embedded in the saved attempt (best)
-          let imgUrl = pq.imageUrl || pq.img || pq.image || null;
-
-          // 2) fallback: try to find it in current runtime questions[]
-          if (!imgUrl && Array.isArray(questions) && questions.length) {
-            try {
-              const found = questions.find(q => (String(q.id) === String(qidVal) || String(q.qid || '') === String(qidVal)));
-              if (found) imgUrl = found.img || found.imageUrl || found.imgUrl || null;
-            } catch (e) { }
-          }
-
-          // 3) fallback: try to fetch question doc from Firestore (if mockId available)
-          if (!imgUrl && db && d.mockId) {
-            try {
-              const qSnap = await db.collection('mocks').doc(d.mockId).collection('questions')
-                .where('qid', '==', qidVal).limit(1).get().catch(() => ({ docs: [] }));
-              if (qSnap && qSnap.docs && qSnap.docs.length) {
-                const qdoc = qSnap.docs[0].data();
-                imgUrl = qdoc.imageUrl || qdoc.img || qdoc.image || findImageFromDoc(qdoc) || null;
-              }
-            } catch (e) {
-              console.warn('failed to fetch question doc for preview', e);
-            }
-          }
-
-          // show preview (open window)
-          const w = window.open('', '_blank', 'width=900,height=700');
-          if (!w) { alert('Popup blocked — allow popups to preview images'); return; }
-          if (imgUrl) {
-            w.document.title = 'Question Preview - ' + qidVal;
-            w.document.body.style.margin = '0';
-            w.document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#fff;padding:12px"><img src="${escapeHtml(imgUrl)}" style="max-width:100%;max-height:100%;object-fit:contain" alt="${escapeHtml(qidVal)}" /></div>`;
-          } else {
-            w.document.title = 'Preview - Not available';
-            w.document.body.style.margin = '0';
-            w.document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#fff;padding:12px;color:#b37b4a;font-weight:800">No image available for ${escapeHtml(qidVal)}</div>`;
-          }
-        });
-
-        const badge = document.createElement('div');
-        badge.className = 'badge';
-        if (pq.selectedIndex == null) { badge.classList.add('unseen'); badge.textContent = 'Unanswered'; }
-        else if (pq.selectedIndex === pq.correctIndex) { badge.classList.add('correct'); badge.textContent = 'Correct'; }
-        else { badge.classList.add('wrong'); badge.textContent = 'Wrong'; }
-
-        mid.appendChild(qid);
-        mid.appendChild(selSpan);
-        mid.appendChild(corSpan);
-        mid.appendChild(scoreSpan);
-        mid.appendChild(timeSpan);
-
-        tr.appendChild(left);
-        tr.appendChild(mid);
-
-        // actions column: badge + view button
-        const actionsWrap = document.createElement('div');
-        actionsWrap.style.display = 'flex';
-        actionsWrap.style.gap = '8px';
-        actionsWrap.style.alignItems = 'center';
-        actionsWrap.appendChild(badge);
-        actionsWrap.appendChild(viewBtn);
-
-        tr.appendChild(actionsWrap);
-        list.appendChild(tr);
-      });
-
-      // show the modal
-      detailOverlay.style.display = 'flex';
-      const closeTop = document.getElementById('close-detail');
-      if (closeTop) closeTop.onclick = () => { detailOverlay.style.display = 'none'; };
-      const closeBottom = document.getElementById('close-detail-bottom');
-      if (closeBottom) closeBottom.onclick = () => { detailOverlay.style.display = 'none'; };
-    }
-
-    closeDetail.addEventListener('click', () => detailOverlay.style.display = 'none');
-
-    /* ========== init ========== */
-    // initial fallback sample
-    questions = sampleBank();
-    // Build an initial sectionMap from sampleBank
-    (function buildInitialSectionMap() {
-      const map = {};
-      for (let i = 0; i < questions.length; i++) {
-        const s = questions[i].section || 'Unknown';
-        if (!map[s]) map[s] = [];
-        map[s].push(i);
-      }
-      const preferred = ['Physics', 'Chemistry', 'Mathematics'];
-      const ordered = {};
-      preferred.forEach(p => { if (map[p]) ordered[p] = map[p]; });
-      Object.keys(map).forEach(k => { if (!ordered[k]) ordered[k] = map[k]; });
-      sectionMap = ordered;
-    })();
-
-    responses = questions.map(() => ({ choiceIndex: null, markedReview: false, timeSpentSec: 0, viewed: false }));
-    questionTimers = questions.map(() => null);
-    current = 0;
-    renderQuestion();
-    renderPicker('Physics');
-
-    openStart.addEventListener('click', () => { if (!currentUser) { loginError.textContent = 'Please login'; loginScreen.style.display = 'flex'; loginUsername.focus(); return; } startModal.style.display = 'flex'; });
-
-    (async () => {
-      if (db) await loadMocks(); else {
-        mocksList = [
-          {
-            id: 'local-1', name: 'Mock 1', time: '120', qns: '60', syllabus: 'Full CEE', active: 'yes',
-            img_p1: 'https://via.placeholder.com/600x360?text=P1', ans_p1: 'A',
-            img_c1: 'https://via.placeholder.com/600x360?text=C1', ans_c1: 'B',
-            img_m1: 'https://via.placeholder.com/600x360?text=M1', ans_m1: 'C'
-          },
-          { id: 'local-2', name: 'Mock 2 (Archived)', time: '90', qns: '30', syllabus: 'Physics only', active: 'no' }
-        ]; await renderMocks();
-      }
-    })();
-
-    // auto-focus username when login shows
-    // If you programmatically show login screen elsewhere, call: loginUsername.focus()
-
-    function updateSectionTabs() {
-      const phyBtn = document.getElementById('btn-phy');
-      const chemBtn = document.getElementById('btn-chem');
-      const mathBtn = document.getElementById('btn-math');
-
-      const hasPhysics = sectionMap && sectionMap.Physics && sectionMap.Physics.length;
-      const hasChem = sectionMap && sectionMap.Chemistry && sectionMap.Chemistry.length;
-      const hasMath = sectionMap && sectionMap.Mathematics && sectionMap.Mathematics.length;
-
-      phyBtn.style.display = hasPhysics ? 'inline-block' : 'none';
-      chemBtn.style.display = hasChem ? 'inline-block' : 'none';
-      mathBtn.style.display = hasMath ? 'inline-block' : 'none';
-
-      // return first available section (priority order)
-      if (hasPhysics) return 'Physics';
-      if (hasChem) return 'Chemistry';
-      if (hasMath) return 'Mathematics';
-      return null;
-    }
-    const infoBtn = document.getElementById('info-btn');
-    const devInfoModal = document.getElementById('dev-info-modal');
-    const closeDevInfo = document.getElementById('close-dev-info');
-
-    infoBtn?.addEventListener('click', () => {
-      devInfoModal.style.display = 'flex';
-    });
-
-    closeDevInfo?.addEventListener('click', () => {
-      devInfoModal.style.display = 'none';
-    });
-
-    devInfoModal?.addEventListener('click', (e) => {
-      if (e.target === devInfoModal) {
-        devInfoModal.style.display = 'none';
-      }
-    });
-  </script>
+
+    <div class="overlay" id="history-overlay" style="display:none">
+        <div style="width:100%;max-width:880px;background:#fff;padding:8px;border-radius:10px;overflow:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <h3 style="margin:0">Your Submissions</h3>
+                <button id="close-history" class="btn-secondary">Close</button>
+            </div>
+            <div id="history-grid"
+                style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px">
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="detail-overlay" style="display:none">
+        <div class="detail-card" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+            <div class="detail-left">
+                <div class="detail-header">
+                    <div>
+                        <div id="detail-title" class="detail-title">Submission</div>
+                        <div id="detail-sub" class="detail-sub">Summary</div>
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <div id="detail-score" class="score-badge">
+                            <div class="big">0</div>
+                            <div class="small">Score</div>
+                        </div>
+                        <button id="close-detail" class="btn-secondary">Close</button>
+                    </div>
+                </div>
+
+                <div class="stats-row" aria-hidden="false">
+                    <div class="stat">
+                        <strong id="stat-correct">0</strong>
+                        <span>Correct</span>
+                    </div>
+                    <div class="stat">
+                        <strong id="stat-wrong">0</strong>
+                        <span>Wrong</span>
+                    </div>
+                    <div class="stat">
+                        <strong id="stat-unanswered">0</strong>
+                        <span>Unanswered</span>
+                    </div>
+                </div>
+
+                <div class="progress-wrap" aria-hidden="false">
+                    <div style="font-size:12px;color:var(--muted);margin-top:6px">Completion</div>
+                    <div class="progress" aria-hidden="false"><i id="progress-bar"></i></div>
+                </div>
+
+                <div class="perq" id="perq-list" aria-live="polite"></div>
+            </div>
+
+            <div class="detail-right">
+                <div style="display:flex;flex-direction:column;gap:10px">
+                    <div style="font-weight:800;color:var(--accent-dark);font-size:15px">Detailed results</div>
+                    <div style="font-size:13px;color:var(--muted)">Review per-question outcome, time used and score. Use
+                        the
+                        badges to quickly spot errors and revise those topics.</div>
+
+                    <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+                        <div style="font-size:13px;color:var(--muted)">Total Score</div>
+                        <div class="score-badge" style="align-items:flex-start;padding:10px;border-radius:12px">
+                            <div style="font-size:22px;font-weight:900" id="right-total">0</div>
+                            <div style="font-size:12px;color:var(--muted);font-weight:700">Out of <span
+                                    id="right-max">0</span></div>
+                        </div>
+                        <div style="font-size:13px;color:var(--muted)">Duration</div>
+                        <div style="font-weight:800" id="right-duration">00:00</div>
+                    </div>
+
+                    <div style="margin-top:auto">
+                        <button id="close-detail-bottom" class="btn-secondary" style="width:100%">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation modal for submit -->
+    <div id="confirm-submit-modal" role="dialog" aria-modal="true">
+        <div class="confirm-card" role="document">
+            <div class="confirm-row">
+                <div class="confirm-title">Confirm submission</div>
+                <div style="font-size:12px;color:var(--muted)">Make sure you've reviewed your answers</div>
+            </div>
+            <div class="confirm-stats" id="confirm-stats">
+                <div class="confirm-stat" id="confirm-attempted">Attempted: 0</div>
+                <div class="confirm-stat" id="confirm-left">Left: 0</div>
+                <div class="confirm-stat" id="confirm-remaining">Time left: 00:00:00</div>
+            </div>
+
+            <div style="font-size:13px;color:var(--muted);">If you proceed, your attempt will be submitted and saved.
+                Reattempts are not permitted for this mock.</div>
+
+            <div class="confirm-actions">
+                <button id="confirm-submit-no" class="btn-secondary">Cancel</button>
+                <button id="confirm-submit-yes" class="btn-danger">Confirm submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN LOGIN (no demo) -->
+    <div id="login-screen" class="login-screen" role="dialog" aria-modal="true">
+        <div class="px-login-fullscreen">
+            <div class="px-login-top">
+                <img id="login-banner" src="assets/banner.jpeg" alt="PROYAX Banner">
+                <h1>CIVINITY - Assam CEE 2026 Mock Test Series</h1>
+            </div>
+            <div class="px-login-center">
+                <div class="px-login-grid">
+
+                    <!-- LEFT CARD -->
+                    <div class="feature-card">
+                        <!-- IMAGE -->
+                        <img src="assets/card-l.png" alt="Join & Connect" class="feature-img">
+
+                        <div class="feature-content">
+                            <h2 class="feature-title">Join & Connect</h2>
+
+                            <a href="https://chat.whatsapp.com/YOUR_LINK" target="_blank" class="link-btn whatsapp">
+                                <img src="assets/wp.png" alt="WhatsApp">
+                                Join WhatsApp Group
+                            </a>
+
+                            <a href="https://youtube.com/@YOUR_CHANNEL" target="_blank" class="link-btn youtube">
+                                <img src="assets/yt.png" alt="YouTube">
+                                Visit YouTube Channel
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <!-- CENTER FORM -->
+                    <form class="px-login-column" id="login-form" autocomplete="off">
+                        <h2 class="welcome">Welcome Back Aspirant!</h2>
+
+                        <input id="login-username" class="px-input" placeholder="Username" required />
+
+                        <input id="login-password" class="px-input" type="password" placeholder="Password" required />
+
+                        <div class="px-actions">
+                            <button type="submit" id="login-btn" class="px-btn primary">Login</button>
+                            <span id="login-error" class="px-help"></span>
+                        </div>
+
+                        <div class="px-register">
+                            New here? <a href="#">Contact Admins for new registration</a>
+                        </div>
+                    </form>
+
+
+                    <!-- RIGHT CARD : FEATURES -->
+                    <div class="feature-card">
+                        <!-- IMAGE -->
+                        <img src="assets/card-r.png" alt="CEE Mock Test Interface" class="feature-img">
+
+                        <div class="feature-content">
+                            <h2 class="feature-title">CEE Mock Test Series 2026</h2>
+
+                            <ul class="feature-list icons">
+
+                                <li>
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M3 3h18v4H3zM3 9h18v12H3z" />
+                                    </svg>
+                                    Real CBT-based exam interface
+                                </li>
+
+                                <li>
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 6v6l4 2M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                    </svg>
+                                    Live timer with section-wise tracking
+                                </li>
+
+                                <li>
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4M12 2l7 4v6c0 5-3.5 9.4-7 10-3.5-.6-7-5-7-10V6z" />
+                                    </svg>
+                                    One-attempt secure test system
+                                </li>
+
+                                <li>
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M3 13h4v8H3zM10 9h4v12h-4zM17 5h4v16h-4z" />
+                                    </svg>
+                                    Instant results with performance analytics
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M5 12l5 5L19 7" />
+                                    </svg>
+                                    Detailed solutions & answer review
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- LOGIN PAGE FOOTER -->
+        <footer class="login-footer">
+            <div class="login-footer-inner">
+                <span>© 2026 CIVINITY Hubs. All rights reserved.</span>
+                <span class="sep">•</span>
+                <span>Powered by <strong>PROYAX</strong></span>
+                <span class="sep">•</span>
+                <a href="#" target="_blank">Privacy Policy</a>
+                <span class="sep">•</span>
+                <a href="#" target="_blank">Terms & Conditions</a>
+            </div>
+        </footer>
+
+    </div>
+    <div id="dev-info-modal">
+        <div class="dev-info-card">
+            <h3>Developer Info</h3>
+            <p><strong>Platform:</strong> PROYAX Assam</p>
+            <p><strong>Developed by:</strong>Team PROYAX</p>
+            <p><strong>Purpose:</strong> Assam CEE 2026 Mock Test & Analytics</p>
+            <p style="font-size:12px;color:#6b7280">
+                Built for students, by students ❤️
+            </p>
+
+            <div style="text-align:right;margin-top:10px">
+                <button id="close-dev-info" class="btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
