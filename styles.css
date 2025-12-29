@@ -1163,7 +1163,7 @@ background: linear-gradient(
   background-image: url("favicon.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 35%;
+  background-size: 30%;
   opacity: 0.08;
   pointer-events: none;
   z-index: 2;
