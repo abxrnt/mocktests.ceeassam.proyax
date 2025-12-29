@@ -1163,9 +1163,9 @@ background: linear-gradient(
   background-image: url("favicon.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 55%;          /* 🔥 controls size of watermark */
-  opacity: 0.08;                 /* 🔥 faded look */
-  pointer-events: none;          /* no interference */
+  background-size: 35%;
+  opacity: 0.08;
+  pointer-events: none;
   z-index: 2;
 }
 
