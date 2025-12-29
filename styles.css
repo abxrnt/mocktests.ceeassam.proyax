@@ -773,7 +773,7 @@ background: linear-gradient(
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: linear-gradient(90deg, #fff6ed, #fff2e7);
   border: 1px solid rgba(255, 220, 190, 0.7);
@@ -781,8 +781,8 @@ background: linear-gradient(
 }
 
 .avatar {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 10px;
   background: linear-gradient(135deg, #ffedd5, #ffc999);
   display: flex;
