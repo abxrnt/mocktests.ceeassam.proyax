@@ -1138,3 +1138,33 @@ background: linear-gradient(
     padding: 20px 16px 120px;
   }
 }
+
+
+
+/* ===============================
+   QUESTION IMAGE WATERMARK
+   =============================== */
+
+.question {
+  position: relative;
+}
+
+/* wrapper for image watermark */
+.question img {
+  position: relative;
+  z-index: 1;
+}
+
+/* watermark overlay */
+.question::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("favicon.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 55%;          /* 🔥 controls size of watermark */
+  opacity: 0.08;                 /* 🔥 faded look */
+  pointer-events: none;          /* no interference */
+  z-index: 2;
+}
