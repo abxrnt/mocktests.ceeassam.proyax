@@ -1168,3 +1168,16 @@ background: linear-gradient(
   pointer-events: none;          /* no interference */
   z-index: 2;
 }
+
+.question {
+  position: relative;
+  user-select: none;
+}
+
+.question img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  cursor: default !important;
+}
