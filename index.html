@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap"
         rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
@@ -45,11 +46,21 @@
                         <div id="user-name" class="user-name">User</div>
                     </div>
 
-                    <button id="results-btn" class="btn-secondary" style="display:none">Results</button>
-                    <button id="open-login" class="btn-primary" style="display:none">Login</button>
-                    <button id="logout-btn" class="btn-secondary" style="display:none">Logout</button>
-                    <button id="open-start" class="btn-primary" style="display:none">Start</button>
+                    <button id="results-btn" class="btn-secondary" style="display:none">
+  <i data-lucide="bar-chart-3"></i> Results
+</button>
 
+<button id="open-login" class="btn-primary" style="display:none">
+  <i data-lucide="log-in"></i> Login
+</button>
+
+<button id="logout-btn" class="btn-secondary" style="display:none">
+  <i data-lucide="log-out"></i> Logout
+</button>
+
+<button id="open-start" class="btn-primary" style="display:none">
+  <i data-lucide="play"></i> Start
+</button>
                 </div>
 
             </div>
@@ -99,12 +110,25 @@
             </div>
 
             <div class="controls">
-                <button class="btn-secondary" id="mark-review">Mark</button>
-                <!-- ADDED CLEAR BUTTON -->
-                <button class="btn-secondary" id="clear-btn">Clear</button>
-                <button class="btn-secondary" id="prev-btn">Prev</button>
-                <button class="btn-primary" id="next-btn">Next</button>
-                <button class="btn-danger" id="submit-btn">Submit</button>
+                <button class="btn-secondary" id="mark-review">
+  <i data-lucide="bookmark"></i> Mark
+</button>
+
+<button class="btn-secondary" id="clear-btn">
+  <i data-lucide="eraser"></i> Clear
+</button>
+
+<button class="btn-secondary" id="prev-btn">
+  <i data-lucide="chevron-left"></i> Prev
+</button>
+
+<button class="btn-primary" id="next-btn">
+  Next <i data-lucide="chevron-right"></i>
+</button>
+
+<button class="btn-danger" id="submit-btn">
+  <i data-lucide="send"></i> Submit
+</button>
             </div>
         </div>
 
@@ -146,7 +170,9 @@
         <div class="start-card" role="dialog" aria-modal="true" aria-labelledby="start-title">
             <div style="display:flex;justify-content:space-between;align-items:center">
                 <h3 id="start-title" style="margin:0;font-size:14px">Select Mock</h3>
-                <button id="close-mocks" class="btn-secondary">Close</button>
+                <button id="close-mocks" class="btn-secondary">
+  <i data-lucide="x"></i> Close
+</button>
             </div>
             <div id="mocks-container"
                 style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:10px">
@@ -249,8 +275,13 @@
                 Reattempts are not permitted for this mock.</div>
 
             <div class="confirm-actions">
-                <button id="confirm-submit-no" class="btn-secondary">Cancel</button>
-                <button id="confirm-submit-yes" class="btn-danger">Confirm submit</button>
+                <button id="confirm-submit-no" class="btn-secondary">
+  <i data-lucide="x-circle"></i> Cancel
+</button>
+
+<button id="confirm-submit-yes" class="btn-danger">
+  <i data-lucide="check-circle"></i> Confirm submit
+</button>
             </div>
         </div>
     </div>
@@ -295,7 +326,9 @@
                         <input id="login-password" class="px-input" type="password" placeholder="Password" required />
 
                         <div class="px-actions">
-                            <button type="submit" id="login-btn" class="px-btn primary">Login</button>
+                            <button type="submit" id="login-btn" class="px-btn primary">
+  <i data-lucide="log-in"></i> Login
+</button>
                             <span id="login-error" class="px-help"></span>
                         </div>
 
@@ -390,7 +423,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
     <script src="script.js"></script>
+    <script>
+  lucide.createIcons();
+</script>
 </body>
 
 </html>
+
 
