@@ -345,60 +345,73 @@ button {
 }
 
 /* make overlays scrollable when content taller than viewport */
+/* ===============================
+   FULL SCREEN MOCK START MODAL
+   =============================== */
+
 .overlay {
+  display: none;
   position: fixed;
   inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(2, 6, 23, 0.35);
-  z-index: 1200;
-  padding: 10px;
-  /* keep centered but allow scrolling */
+  z-index: 2000;
+  background: linear-gradient(180deg, #fff6ef, #fff2ea);
+  padding: 0;
   overflow: auto;
 }
 
-/* constrain start-card height and enable internal scroll */
 .start-card {
-  background: #fff;
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 880px;
-  width: 100%;
-  box-shadow: 0 24px 60px rgba(2, 6, 23, 0.14);
-  border: 1px solid rgba(255, 245, 235, 0.9);
-  max-height: calc(100vh - 40px);
-  overflow: auto;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  border-radius: 0;
+  box-shadow: none;
+  border: 0;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .mock-card {
-  padding: 6px;
-  border-radius: 8px;
-  border: 1px solid rgba(250, 240, 230, 0.9);
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff, #fffaf7);
+  border: 1px solid rgba(255, 220, 190, 0.9);
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .mock-card.inactive {
   opacity: 0.45;
-  filter: grayscale(30%);
+  filter: grayscale(35%);
   pointer-events: none;
-  position: relative;
 }
 
 .mock-card.inactive::after {
-  content: "Not available";
+  content: "Locked";
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 6px;
-  padding: 4px 6px;
-  font-weight: 800;
+  right: 16px;
+  top: 16px;
+  padding: 6px 10px;
+  border-radius: 999px;
   font-size: 12px;
-  color: #b37b4a;
-  border: 1px solid rgba(255, 220, 180, 0.6);
+  font-weight: 900;
+  background: #fff;
+  color: #b45309;
+  border: 1px solid rgba(255, 200, 160, 0.7);
+}
+
+
+.mock-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(249, 115, 22, 0.18);
+  border-color: #ffb680;
 }
 
 .login-screen {
@@ -1223,5 +1236,44 @@ button i[data-lucide] {
 @media (max-width: 900px) {
   .controls button span {
     display: none;
+  }
+}
+
+/* Left side (test info) */
+.mock-card .left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mock-card .left h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 900;
+  color: #111;
+}
+
+.mock-card .left span {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* Right side (button / status) */
+.mock-card .right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .mock-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mock-card .right {
+    width: 100%;
+    justify-content: flex-end;
   }
 }
