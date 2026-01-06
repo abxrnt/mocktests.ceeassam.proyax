@@ -1399,3 +1399,58 @@ button i[data-lucide] {
     justify-content: flex-end;
   }
 }
+
+.mock-card {
+  display: grid !important;
+  grid-template-columns: 180px 130px 150px 1fr 110px 90px;
+  align-items: center;
+  column-gap: 18px;
+}
+
+.mock-card .left h4 {
+  font-size: 15px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.mock-card .meta-time {
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.mock-card .meta-date {
+  font-weight: 800;
+  color: #111;
+  white-space: nowrap;
+}
+
+.mock-card .meta-syllabus {
+  font-weight: 700;
+  color: #333;
+  line-height: 1.35;
+}
+
+.mock-card .right {
+  justify-self: end;
+  display: flex;
+  gap: 10px;
+}
+
+.mock-card .status {
+  justify-self: end;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .mock-card {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+  }
+
+  .mock-card .right,
+  .mock-card .status {
+    justify-self: start;
+  }
+}
