@@ -1277,3 +1277,125 @@ button i[data-lucide] {
     justify-content: flex-end;
   }
 }
+/* =====================================================
+   🔥 FINAL MOCK START MODAL FIX — DROP-IN BLOCK
+   Paste this AT THE VERY END of your CSS
+   ===================================================== */
+
+/* FULLSCREEN OVERLAY */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: linear-gradient(180deg, #fff6ef, #fff2ea);
+  overflow-y: auto;
+}
+
+/* FULLSCREEN CONTAINER */
+.start-card {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* FORCE MOCK LIST → ONE COLUMN */
+.start-card > * {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px;
+  width: 100%;
+}
+
+/* LONG HORIZONTAL MOCK CARD */
+.mock-card {
+  position: relative;
+  width: 100%;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff, #fffaf7);
+  border: 1px solid rgba(255, 220, 190, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  opacity: 1 !important;
+  filter: none !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* HOVER EFFECT */
+.mock-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(249, 115, 22, 0.18);
+  border-color: #ffb680;
+}
+
+/* LOCKED STATE */
+.mock-card.inactive {
+  opacity: 0.45 !important;
+  filter: grayscale(35%) !important;
+  pointer-events: none;
+}
+
+.mock-card.inactive::after {
+  content: "Locked";
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  background: #fff;
+  color: #b45309;
+  border: 1px solid rgba(255, 200, 160, 0.7);
+}
+
+/* LEFT CONTENT */
+.mock-card .left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mock-card .left h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 900;
+  color: #111;
+}
+
+.mock-card .left span {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* RIGHT ACTIONS */
+.mock-card .right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* MOBILE SAFE */
+@media (max-width: 768px) {
+  .mock-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mock-card .right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
