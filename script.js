@@ -48,14 +48,16 @@ const firebaseConfig = {
       const qno = document.getElementById("qno");
       const questionEl = document.getElementById("question");
       const optionsEl = document.getElementById("options");
+      const headerMockTitleEl = document.getElementById("header-mock-title");
       const qtime = document.getElementById("qtime");
       const qstatus = document.getElementById("qstatus");
       const globalTimer = document.getElementById("global-timer");
+      const timerRingFill = document.getElementById("timer-ring-fill");
 
       // user badge DOM refs (new)
       const userBadge = document.getElementById("user-badge");
-      const userNameEl = document.getElementById("user-name");
-      const userAvatarEl = document.getElementById("user-avatar");
+      const userNameEl = document.getElementById("user-name-text");
+      const userEmailEl = document.getElementById("user-email");
 
       const startModal = document.getElementById("start-modal");
       const mocksContainer = document.getElementById("mocks-container");
@@ -414,6 +416,11 @@ const firebaseConfig = {
       let currentMockName = "";
       let sectionMap = null;
       let totalDurationSec = 0; // <-- total test duration in seconds (used for countdown)
+      const TIMER_RING_CIRCUMFERENCE = 2 * Math.PI * 18;
+      function updateHeaderMockTitle() {
+        if (!headerMockTitleEl) return;
+        headerMockTitleEl.textContent = currentMockName || "CEE Mock Test";
+      }
 
       // utilities
       function fmtH(sec) {
@@ -426,6 +433,39 @@ const firebaseConfig = {
         const m = Math.floor(sec / 60),
           s = sec % 60;
         return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+      }
+      function updateTimerRing(remainingSec, durationSec) {
+        if (!timerRingFill) return;
+        if (!durationSec || durationSec <= 0) {
+          timerRingFill.style.strokeDasharray = `${TIMER_RING_CIRCUMFERENCE}`;
+          timerRingFill.style.strokeDashoffset = `${TIMER_RING_CIRCUMFERENCE}`;
+          return;
+        }
+        const ratio = Math.max(0, Math.min(1, remainingSec / durationSec));
+        const offset = TIMER_RING_CIRCUMFERENCE * (1 - ratio);
+        timerRingFill.style.strokeDasharray = `${TIMER_RING_CIRCUMFERENCE}`;
+        timerRingFill.style.strokeDashoffset = `${offset}`;
+      }
+      function requestAppFullscreen() {
+        try {
+          if (document.fullscreenElement) return;
+          const root = document.documentElement;
+          if (root && typeof root.requestFullscreen === "function") {
+            root.requestFullscreen().catch(() => {});
+          }
+        } catch (_) {
+          // ignore fullscreen errors
+        }
+      }
+      function exitAppFullscreen() {
+        try {
+          if (!document.fullscreenElement) return;
+          if (typeof document.exitFullscreen === "function") {
+            document.exitFullscreen().catch(() => {});
+          }
+        } catch (_) {
+          // ignore fullscreen errors
+        }
       }
       function letterToIndex(letter) {
         if (letter == null) return null;
@@ -631,8 +671,10 @@ const firebaseConfig = {
       // ensure badge hidden by default
       userBadge.style.display = "none";
       userNameEl.textContent = "Not signed in";
-      userAvatarEl.textContent = "P";
+      if (userEmailEl) userEmailEl.textContent = "-";
       globalTimer.textContent = "00:00:00";
+      updateTimerRing(0, 0);
+      updateHeaderMockTitle();
 
       // login (no guest/demo option)
       document
@@ -780,12 +822,9 @@ const firebaseConfig = {
         // show attractive badge
         userNameEl.textContent =
           currentUser.name || currentUser.username || "User";
-        userAvatarEl.textContent =
-          currentUser.name && currentUser.name[0]
-            ? currentUser.name[0].toUpperCase()
-            : currentUser.username
-              ? currentUser.username[0].toUpperCase()
-              : "U";
+        if (userEmailEl) {
+          userEmailEl.textContent = currentUser.email || "-";
+        }
         userBadge.style.display = "flex";
 
         // keep same header/footer; replace center content with greeting + cards
@@ -831,6 +870,68 @@ const firebaseConfig = {
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && profileModal && profileModal.style.display === "flex") {
           closeProfileModal();
+          return;
+        }
+
+        const target = e.target;
+        const tag = target && target.tagName ? target.tagName.toLowerCase() : "";
+        const isEditable =
+          (target && target.isContentEditable) ||
+          tag === "input" ||
+          tag === "textarea" ||
+          tag === "select";
+        if (isEditable) return;
+
+        if (!testStarted || submittedAlready) return;
+        if (confirmModal && confirmModal.style.display === "flex") return;
+
+        const key = (e.key || "").toLowerCase();
+
+        // Prev / Next navigation
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey && key === "arrowleft") {
+          e.preventDefault();
+          prevBtn.click();
+          return;
+        }
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey && key === "arrowright") {
+          e.preventDefault();
+          nextBtn.click();
+          return;
+        }
+
+        // Option selection: A / B / C / D
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey && ["a", "b", "c", "d"].includes(key)) {
+          e.preventDefault();
+          const idx = { a: 0, b: 1, c: 2, d: 3 }[key];
+          if (typeof idx === "number" && responses[current]) {
+            recordQuestionTimeStop(current);
+            responses[current].choiceIndex = idx;
+            responses[current].markedReview = false;
+            renderQuestion();
+            renderPicker(getSectionOfIndex(current));
+            recordQuestionTimeStart(current);
+          }
+          return;
+        }
+
+        // Mark for review: M
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey && key === "m") {
+          e.preventDefault();
+          markReviewBtn.click();
+          return;
+        }
+
+        // Clear: X
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey && key === "x") {
+          e.preventDefault();
+          clearBtn.click();
+          return;
+        }
+
+        // Submit: Ctrl+S
+        if (e.ctrlKey && !e.altKey && !e.shiftKey && key === "s") {
+          e.preventDefault();
+          submitBtn.click();
         }
       });
 
@@ -984,8 +1085,8 @@ const firebaseConfig = {
         if (userNameEl) {
           userNameEl.textContent = normalizedName;
         }
-        if (userAvatarEl && normalizedName[0]) {
-          userAvatarEl.textContent = normalizedName[0].toUpperCase();
+        if (userEmailEl) {
+          userEmailEl.textContent = normalizedEmail;
         }
       }
 
@@ -1006,7 +1107,7 @@ const firebaseConfig = {
         setLoginMiddleMode(false);
         userBadge.style.display = "none";
         userNameEl.textContent = "Not signed in";
-        userAvatarEl.textContent = "P";
+        if (userEmailEl) userEmailEl.textContent = "-";
         testStarted = false;
         // Hide status dot on logout
         const statusDot = document.getElementById("status-dot");
@@ -1016,6 +1117,7 @@ const firebaseConfig = {
         stopGlobalTimer();
         totalDurationSec = 0;
         globalTimer.textContent = "00:00:00";
+        updateTimerRing(0, 0);
         questions = sampleBank();
         responses = questions.map(() => ({
           choiceIndex: null,
@@ -1032,6 +1134,7 @@ const firebaseConfig = {
         appEl.setAttribute("aria-hidden", "true");
         currentMockId = null;
         currentMockName = "";
+        updateHeaderMockTitle();
       }
 
       if (postLoginLogoutBtn) {
@@ -1224,6 +1327,7 @@ const firebaseConfig = {
             startBtn.className = "btn-primary";
             startBtn.innerHTML = '<i data-lucide="play-circle"></i> Start';
             startBtn.addEventListener("click", () => {
+              requestAppFullscreen();
               startModal.style.display = "none";
               startMock(m);
             });
@@ -1399,6 +1503,7 @@ const firebaseConfig = {
 
         currentMockId = mock.id;
         currentMockName = String(mock.name || mock.id || "").trim();
+        updateHeaderMockTitle();
         } finally {
           hideLoadingOverlay();
         }
@@ -1415,12 +1520,14 @@ const firebaseConfig = {
             totalDurationSec <= 0
           ) {
             globalTimer.textContent = "00:00:00";
+            updateTimerRing(0, 0);
             return;
           }
           const elapsed = Math.floor((Date.now() - startTime) / 1000);
           let remaining = totalDurationSec - elapsed;
           if (remaining < 0) remaining = 0;
           globalTimer.textContent = fmtH(remaining);
+          updateTimerRing(remaining, totalDurationSec);
           if (remaining <= 0) {
             // stop timer, auto submit
             clearInterval(globalTimerInterval);
@@ -1511,8 +1618,24 @@ const firebaseConfig = {
           questionEl.innerHTML = rulesHTML;
           optionsEl.innerHTML = "";
           qno.textContent = "Question 1";
-          qtime.textContent = "Time spent: 00:00";
-          qstatus.textContent = "Status: Unseen";
+          if (qtime) qtime.textContent = "Time spent: 00:00";
+          if (qstatus) qstatus.textContent = "Status: Unseen";
+          return;
+        }
+
+        const activeSection = getActiveSectionName();
+        if (
+          activeSection &&
+          (!sectionMap || !sectionMap[activeSection] || sectionMap[activeSection].length === 0)
+        ) {
+          qno.textContent = `${activeSection} • Q 0`;
+          questionEl.innerHTML = "";
+          const p = document.createElement("div");
+          p.textContent = `No question of ${activeSection} in this particular mock test`;
+          p.style.color = "#612d53";
+          p.style.fontWeight = "700";
+          questionEl.appendChild(p);
+          optionsEl.innerHTML = "";
           return;
         }
 
@@ -1551,14 +1674,18 @@ const firebaseConfig = {
           questionEl.appendChild(p);
         }
 
-        qtime.textContent =
-          "Time spent: " + fmtMS(responses[current].timeSpentSec || 0);
+        if (qtime) {
+          qtime.textContent =
+            "Time spent: " + fmtMS(responses[current].timeSpentSec || 0);
+        }
         const resp = responses[current];
-        qstatus.textContent = resp.markedReview
-          ? "Status: Marked"
-          : resp.choiceIndex === null
-            ? "Status: Unseen"
-            : "Status: Answered";
+        if (qstatus) {
+          qstatus.textContent = resp.markedReview
+            ? "Status: Marked"
+            : resp.choiceIndex === null
+              ? "Status: Unseen"
+              : "Status: Answered";
+        }
 
         const opts = ["A", "B", "C", "D"];
         opts.forEach((lab, i) => {
@@ -1625,6 +1752,19 @@ const firebaseConfig = {
         )
           return 0;
         return sectionMap[section][0];
+      }
+
+      function getActiveSectionName() {
+        if (document.getElementById("btn-phy").classList.contains("active")) {
+          return "Physics";
+        }
+        if (document.getElementById("btn-chem").classList.contains("active")) {
+          return "Chemistry";
+        }
+        if (document.getElementById("btn-math").classList.contains("active")) {
+          return "Mathematics";
+        }
+        return null;
       }
 
       document
@@ -1707,8 +1847,10 @@ const firebaseConfig = {
           responses[idx].timeSpentSec =
             (responses[idx].timeSpentSec || 0) + delta;
           questionTimers[idx] = null;
-          qtime.textContent =
-            "Time spent: " + fmtMS(responses[idx].timeSpentSec || 0);
+          if (qtime) {
+            qtime.textContent =
+              "Time spent: " + fmtMS(responses[idx].timeSpentSec || 0);
+          }
         }
       }
 
@@ -1797,6 +1939,7 @@ const firebaseConfig = {
       // Confirm yes -> proceed to submit. If there are marked questions, warn first in modal flow.
       confirmYes.addEventListener("click", async () => {
         confirmModal.style.display = "none";
+        exitAppFullscreen();
         if (!testStarted || submittedAlready) return;
         // if there are any marked questions, confirm again (small inline check)
         const marked = responses
@@ -1818,6 +1961,7 @@ const firebaseConfig = {
         stopGlobalTimer();
         totalDurationSec = 0;
         globalTimer.textContent = "00:00:00";
+        updateTimerRing(0, 0);
         const { total, per } = computeScore();
 
         const result = {
@@ -1874,6 +2018,7 @@ const firebaseConfig = {
         renderPicker(getSectionOfIndex(current));
         currentMockId = null;
         currentMockName = "";
+        updateHeaderMockTitle();
 
         if (currentUser) await loadMocks();
         returnToHomeView();
@@ -2958,9 +3103,10 @@ const firebaseConfig = {
         const hasMath =
           sectionMap && sectionMap.Mathematics && sectionMap.Mathematics.length;
 
-        phyBtn.style.display = hasPhysics ? "inline-block" : "none";
-        chemBtn.style.display = hasChem ? "inline-block" : "none";
-        mathBtn.style.display = hasMath ? "inline-block" : "none";
+        // Keep all 3 sections visible for every mock.
+        phyBtn.style.display = "inline-block";
+        chemBtn.style.display = "inline-block";
+        mathBtn.style.display = "inline-block";
 
         // return first available section (priority order)
         if (hasPhysics) return "Physics";
