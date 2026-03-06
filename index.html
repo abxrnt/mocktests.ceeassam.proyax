@@ -27,6 +27,10 @@
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/lucide@latest"></script>
   </head>
 
@@ -36,12 +40,33 @@
       <div class="main">
         <div class="header">
           <div class="brand">
-            <img id="app-banner" src="/logo.png" alt="PROYAX Logo" />
-            <div>
-              <div class="title">CEE Mock Test</div>
-              <div class="subtitle">
-                Secure your seat with practice-driven mock tests
-              </div>
+            <div class="brand-logos">
+              <img id="app-banner" src="/logo.png" alt="PROYAX Logo" />
+              <img id="app-banner-wide" src="/banner.png" alt="PROYAX Banner" />
+            </div>
+          </div>
+          <div class="brand-copy">
+            <div class="title" id="header-mock-title">CEE Mock Test</div>
+            <div class="subtitle">
+              Combined Entrance Examination 2026
+            </div>
+          </div>
+          <div class="header-timer-wrap">
+            <div class="timer-block">
+              <div class="timer-label">Time Remaining</div>
+              <div class="timer" id="global-timer">00:00:00</div>
+            </div>
+            <div class="timer-ring" id="timer-progress" aria-hidden="true">
+              <svg viewBox="0 0 48 48" focusable="false">
+                <circle class="timer-ring-track" cx="24" cy="24" r="18"></circle>
+                <circle
+                  class="timer-ring-fill"
+                  id="timer-ring-fill"
+                  cx="24"
+                  cy="24"
+                  r="18"
+                ></circle>
+              </svg>
             </div>
           </div>
         </div>
@@ -50,9 +75,7 @@
           <div class="question-top">
             <div>
               <div class="qno" id="qno">Question 1</div>
-              <div class="meta-sm" id="qtime">Time spent: 00:00</div>
             </div>
-            <div class="meta-sm" id="qstatus">Status: Unseen</div>
           </div>
 
           <!-- SHOW RULES & DASHBOARD HELP BEFORE START -->
@@ -101,30 +124,34 @@
             </div>
           </div>
 
-          <div class="options" id="options"></div>
         </div>
 
         <div class="controls">
-          <button class="btn-secondary" id="mark-review">
-            <i data-lucide="bookmark"></i> Mark
-          </button>
+          <div class="controls-left">
+            <div class="options controls-options" id="options"></div>
+          </div>
+          <div class="controls-right">
+            <button class="btn-secondary" id="mark-review">
+              <i data-lucide="bookmark"></i> Mark
+            </button>
 
-          <button class="btn-secondary" id="clear-btn">
-            <i data-lucide="eraser"></i> Clear
-          </button>
+            <button class="btn-secondary" id="clear-btn">
+              <i data-lucide="eraser"></i> Clear
+            </button>
 
-          <button class="btn-secondary" id="prev-btn">
-            <i data-lucide="chevron-left"></i> Prev
-          </button>
+            <button class="btn-secondary" id="prev-btn">
+              <i data-lucide="chevron-left"></i> Prev
+            </button>
 
-          <button class="btn-primary" id="next-btn">
-            <i data-lucide="chevron-right"></i>
-            <span>Next</span>
-          </button>
+            <button class="btn-primary" id="next-btn">
+              <i data-lucide="chevron-right"></i>
+              <span>Next</span>
+            </button>
 
-          <button class="btn-danger" id="submit-btn">
-            <i data-lucide="send"></i> Submit
-          </button>
+            <button class="btn-danger" id="submit-btn">
+              <i data-lucide="send"></i> Submit
+            </button>
+          </div>
         </div>
       </div>
 
@@ -132,22 +159,23 @@
         <div class="side-top" id="side-controls">
           <div class="row1">
             <div id="user-badge" class="user-badge" style="display: none">
-              <div id="user-avatar" class="avatar">U</div>
-              <div id="user-name" class="user-name">
-                User<span
-                  id="status-dot"
-                  class="status-dot"
-                  style="display: none"
-                ></span>
+              <div class="user-left">
+                <i data-lucide="user-round" aria-hidden="true"></i>
+                <div class="user-name-wrap">
+                  <div id="user-name-text" class="user-name">User</div>
+                  <span
+                    id="status-dot"
+                    class="status-dot"
+                    style="display: none"
+                  ></span>
+                </div>
+              </div>
+              <div class="user-right">
+                <i data-lucide="mail" aria-hidden="true"></i>
+                <div id="user-email" class="user-email">-</div>
               </div>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 8px">
-              <div style="color: #cbd5e1; font-weight: 800; font-size: 12px">
-                Time Remaining:
-              </div>
-              <div class="timer" id="global-timer">00:00:00</div>
-            </div>
           </div>
         </div>
 
@@ -189,6 +217,7 @@
             "
           >
             <div
+              class="subject-row"
               style="display: flex; justify-content: space-between; gap: 8px"
             >
               <div><strong>Physics</strong></div>
@@ -199,6 +228,7 @@
               </div>
             </div>
             <div
+              class="subject-row"
               style="display: flex; justify-content: space-between; gap: 8px"
             >
               <div><strong>Chemistry</strong></div>
@@ -209,6 +239,7 @@
               </div>
             </div>
             <div
+              class="subject-row"
               style="display: flex; justify-content: space-between; gap: 8px"
             >
               <div><strong>Mathematics</strong></div>
@@ -237,18 +268,28 @@
                 letter-spacing: 0.5px;
                 text-transform: uppercase;
               "
-              >Legend</span
+              >Status Key</span
             >
           </div>
           <div class="item">
             <span
               class="sw"
               style="
-                background: rgba(255, 154, 61, 0.2);
-                border: 1px solid rgba(255, 154, 61, 0.3);
+                background: #ffffff;
+                border: 1px solid rgba(97, 45, 83, 0.28);
               "
             ></span>
-            Unseen / Viewed
+            Unseen
+          </div>
+          <div class="item">
+            <span
+              class="sw"
+              style="
+                background: rgba(133, 57, 83, 0.25);
+                border: 1px solid rgba(133, 57, 83, 0.55);
+              "
+            ></span>
+            Viewed
           </div>
           <div class="item">
             <span
@@ -272,19 +313,19 @@
           </div>
         </div>
 
-        <div
-          style="
-            margin-top: auto;
-            font-size: 11px;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 700;
-          "
-        >
-          Navigation
+        <div class="kb-shortcuts">
+          <div class="kb-title">Keyboard Shortcuts</div>
+          <div class="kb-item"><span class="kb-key">A</span> Option A</div>
+          <div class="kb-item"><span class="kb-key">B</span> Option B</div>
+          <div class="kb-item"><span class="kb-key">C</span> Option C</div>
+          <div class="kb-item"><span class="kb-key">D</span> Option D</div>
+          <div class="kb-item"><span class="kb-key">X</span> Clear</div>
+          <div class="kb-item"><span class="kb-key">M</span> Mark</div>
+          <div class="kb-item"><span class="kb-key">Ctrl+S</span> Submit</div>
+          <div class="kb-item"><span class="kb-key">←</span> Prev</div>
+          <div class="kb-item"><span class="kb-key">→</span> Next</div>
         </div>
-        <div style="height: 8px"></div>
+
       </div>
     </div>
 
