@@ -31,6 +31,10 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/lucide@latest"></script>
   </head>
 
@@ -47,9 +51,7 @@
           </div>
           <div class="brand-copy">
             <div class="title" id="header-mock-title">CEE Mock Test</div>
-            <div class="subtitle">
-              Combined Entrance Examination 2026
-            </div>
+            <div class="subtitle">Combined Entrance Examination 2026</div>
           </div>
           <div class="header-timer-wrap">
             <div class="timer-block">
@@ -58,7 +60,12 @@
             </div>
             <div class="timer-ring" id="timer-progress" aria-hidden="true">
               <svg viewBox="0 0 48 48" focusable="false">
-                <circle class="timer-ring-track" cx="24" cy="24" r="18"></circle>
+                <circle
+                  class="timer-ring-track"
+                  cx="24"
+                  cy="24"
+                  r="18"
+                ></circle>
                 <circle
                   class="timer-ring-fill"
                   id="timer-ring-fill"
@@ -123,7 +130,6 @@
               </div>
             </div>
           </div>
-
         </div>
 
         <div class="controls">
@@ -175,7 +181,6 @@
                 <div id="user-email" class="user-email">-</div>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -325,7 +330,6 @@
           <div class="kb-item"><span class="kb-key">←</span> Prev</div>
           <div class="kb-item"><span class="kb-key">→</span> Next</div>
         </div>
-
       </div>
     </div>
 
@@ -353,22 +357,89 @@
       </div>
     </div>
 
-    <div class="overlay results-fullscreen" id="history-overlay" style="display: none">
-      <div class="results-page-shell" role="dialog" aria-modal="true" aria-labelledby="results-history-title">
+    <div
+      class="overlay results-fullscreen"
+      id="history-overlay"
+      style="display: none"
+    >
+      <div
+        class="results-page-shell"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="results-history-title"
+      >
         <div class="results-page-header">
           <div>
-            <h3 id="results-history-title" class="results-modal-title">Results</h3>
-            <p class="results-page-subtitle">Mock-wise history cards with attempt summaries.</p>
+            <h3 id="results-history-title" class="results-modal-title">
+              Results
+            </h3>
+            <p class="results-page-subtitle">
+              Mock-wise history cards with attempt summaries.
+            </p>
           </div>
           <button id="close-history" class="btn-secondary">Close</button>
         </div>
-        <div class="results-cards-wrap" id="history-grid" aria-live="polite">
+        <div
+          class="results-cards-wrap"
+          id="history-grid"
+          aria-live="polite"
+        ></div>
+      </div>
+    </div>
+
+    <div
+      class="overlay results-fullscreen"
+      id="pyqs-overlay"
+      style="display: none"
+    >
+      <div
+        class="results-page-shell"
+        role="dialog"
+        aria-modal="true"
+        aria-label="PYQs"
+      >
+        <div class="results-cards-wrap" id="pyqs-grid" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div
+      class="overlay pyq-image-modal"
+      id="pyq-image-modal"
+      style="display: none"
+      aria-hidden="true"
+    >
+      <div
+        class="pyq-image-shell"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pyq-image-title"
+      >
+        <div class="pyq-image-head">
+          <div id="pyq-image-title">Question Preview</div>
+          <button id="pyq-image-close" class="btn-secondary" type="button">
+            Close
+          </button>
+        </div>
+        <div class="pyq-image-body">
+          <img id="pyq-image-preview" alt="PYQ preview" />
+          <div id="pyq-image-empty" style="display: none">
+            No image available for this question.
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="overlay results-fullscreen" id="detail-overlay" style="display: none">
-      <div class="detail-page-shell" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div
+      class="overlay results-fullscreen"
+      id="detail-overlay"
+      style="display: none"
+    >
+      <div
+        class="detail-page-shell"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="detail-title"
+      >
         <div class="detail-page-header">
           <div>
             <div id="detail-title" class="detail-title">Mock</div>
@@ -401,11 +472,23 @@
       </div>
     </div>
 
-    <div class="overlay question-image-modal" id="question-image-modal" style="display: none" aria-hidden="true">
-      <div class="question-image-shell" role="dialog" aria-modal="true" aria-label="Question Image Preview">
+    <div
+      class="overlay question-image-modal"
+      id="question-image-modal"
+      style="display: none"
+      aria-hidden="true"
+    >
+      <div
+        class="question-image-shell"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Question Image Preview"
+      >
         <div class="question-image-body">
           <img id="question-image-preview" alt="Question preview" />
-          <div id="question-image-empty" style="display:none;">No image available for this question.</div>
+          <div id="question-image-empty" style="display: none">
+            No image available for this question.
+          </div>
         </div>
       </div>
     </div>
@@ -451,7 +534,12 @@
     <!-- FULLSCREEN LOGIN (no demo) -->
     <!-- loading overlay shown during async operations -->
     <div id="loading-overlay" class="loading-overlay" aria-hidden="true">
-      <div class="loading-shell" role="status" aria-live="polite" aria-label="Loading">
+      <div
+        class="loading-shell"
+        role="status"
+        aria-live="polite"
+        aria-label="Loading"
+      >
         <div class="loading-spinner" aria-hidden="true"></div>
         <div id="loading-text" class="loading-text">Checking credentials</div>
       </div>
@@ -486,7 +574,98 @@
           </h1>
         </div>
         <div class="px-login-center">
+          <div class="login-stats-strip" aria-label="Platform statistics">
+            <div class="login-stat-box">
+              <div class="login-stat-label">Students Connected with PROYAX</div>
+              <div class="login-stat-value">
+                <span class="login-live-dot" aria-hidden="true"></span>
+                <span
+                  id="proyax-students-count"
+                  class="login-stat-count"
+                  data-counter-target="137"
+                  >0</span
+                ><span class="login-stat-plus">+</span>
+              </div>
+            </div>
+            <div class="login-stat-box">
+              <div class="login-stat-label">CEE 2026 expected candidates</div>
+              <div class="login-stat-value">
+                <span class="login-live-dot" aria-hidden="true"></span>
+                <span
+                  id="cee-candidates-count"
+                  class="login-stat-count"
+                  data-counter-target="15000"
+                  >0</span
+                ><span class="login-stat-plus">+</span>
+              </div>
+            </div>
+            <div class="login-stat-box">
+              <div class="login-stat-label">CEE PYQs Collection</div>
+              <div class="login-stat-value">
+                <span class="login-live-dot" aria-hidden="true"></span>
+                <span
+                  id="pyq-count"
+                  class="login-stat-count"
+                  data-counter-target="1186"
+                  >0</span
+                ><span class="login-stat-plus">+</span>
+              </div>
+            </div>
+            <div class="login-stat-box">
+              <div class="login-stat-label">Mock Tests Available</div>
+              <div class="login-stat-value">
+                <span class="login-live-dot" aria-hidden="true"></span>
+                <span
+                  id="mock-count"
+                  class="login-stat-count"
+                  data-counter-target="48"
+                  >0</span
+                ><span class="login-stat-plus">+</span>
+              </div>
+            </div>
+          </div>
           <div class="px-login-grid">
+            <div class="login-countdown-card" aria-live="polite">
+              <div class="login-countdown-head">
+                <i data-lucide="calendar-days" aria-hidden="true"></i>
+                <span>CEE 2026 Countdown</span>
+              </div>
+              <div class="login-countdown-value">
+                <span class="countdown-static-dot" aria-hidden="true"></span>
+                <span id="cee-days-left">0</span>
+              </div>
+              <div class="login-countdown-label">Days Left</div>
+              <p class="login-countdown-sub">
+                Counting down to <strong>7 June 2026</strong>
+              </p>
+              <div class="login-institutes-links">
+                <div class="login-institutes-title">Institutes</div>
+                <a
+                  class="login-institute-btn"
+                  href="https://www.aec.ac.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  ><span>AEC (Assam Engineering Co...)</span>
+                  <i data-lucide="external-link" aria-hidden="true"></i
+                ></a>
+                <a
+                  class="login-institute-btn"
+                  href="https://jecassam.ac.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  ><span>JEC (Jorhat Engineering C...)</span>
+                  <i data-lucide="external-link" aria-hidden="true"></i
+                ></a>
+                <a
+                  class="login-institute-btn"
+                  href="https://jist.ac.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  ><span>JIST (Jorhat Institute of...)</span>
+                  <i data-lucide="external-link" aria-hidden="true"></i
+                ></a>
+              </div>
+            </div>
             <!-- CENTER FORM -->
             <form class="px-login-column" id="login-form" autocomplete="off">
               <div style="margin-bottom: 4px">
@@ -535,7 +714,10 @@
               ></span>
 
               <div class="px-register">
-                New here? <a href="https://chat.whatsapp.com/L6RRF1a8l4cCzeuVEl7xLN">Contact Admins for new registration</a>
+                New here?
+                <a href="https://chat.whatsapp.com/L6RRF1a8l4cCzeuVEl7xLN"
+                  >Contact Admins for new registration</a
+                >
               </div>
             </form>
 
@@ -657,25 +839,6 @@
                     difficulty-wise quizzes</span
                   >
                 </div>
-
-                <!-- NEW FEATURE 2 -->
-                <div class="feature-item">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12" y2="16"></line>
-                  </svg>
-                  <span
-                    ><strong>Progress Tracking</strong> – Monitor improvement
-                    over time</span
-                  >
-                </div>
               </div>
             </div>
 
@@ -697,13 +860,22 @@
                   <h2 id="post-login-greeting" class="post-login-title">
                     Hello, User
                   </h2>
-                  <button
-                    id="post-login-logout"
-                    class="btn-secondary"
-                    type="button"
-                  >
-                    <i data-lucide="log-out"></i> Logout
-                  </button>
+                  <div style="display: inline-flex; align-items: center; gap: 8px">
+                    <button
+                      id="post-login-profile"
+                      class="btn-secondary"
+                      type="button"
+                    >
+                      <i data-lucide="user-cog"></i> Profile
+                    </button>
+                    <button
+                      id="post-login-logout"
+                      class="btn-secondary"
+                      type="button"
+                    >
+                      <i data-lucide="log-out"></i> Logout
+                    </button>
+                  </div>
                 </div>
                 <p class="post-login-subtitle">
                   Pick where you want to continue.
@@ -718,7 +890,6 @@
                       <span class="post-login-icon-wrap">
                         <i data-lucide="layout-dashboard"></i>
                       </span>
-                      <span class="post-login-chip">Open</span>
                     </span>
                     <h3>Mocks</h3>
                     <p>
@@ -735,7 +906,6 @@
                       <span class="post-login-icon-wrap">
                         <i data-lucide="bar-chart-3"></i>
                       </span>
-                      <span class="post-login-chip">Open</span>
                     </span>
                     <h3>Results</h3>
                     <p>
@@ -744,20 +914,18 @@
                     </p>
                   </button>
                   <button
-                    id="post-login-profile"
+                    id="post-login-pyqs"
                     class="post-login-card"
                     type="button"
                   >
                     <span class="post-login-card-head">
                       <span class="post-login-icon-wrap">
-                        <i data-lucide="user-cog"></i>
+                        <i data-lucide="book-open-check"></i>
                       </span>
-                      <span class="post-login-chip">Open</span>
                     </span>
-                    <h3>Profile</h3>
+                    <h3>PYQs</h3>
                     <p>
-                      Update your display name used in mock test reports and
-                      greetings.
+                      Browse previous year questions from the PYQs collection.
                     </p>
                   </button>
                 </div>
@@ -767,37 +935,93 @@
         </div>
       </div>
 
-    <div id="profile-modal" class="profile-modal" aria-hidden="true">
-      <div class="profile-modal-shell" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
-        <div class="profile-modal-head">
-          <h2 id="profile-modal-title">Profile Settings</h2>
-          <button type="button" id="profile-modal-close" class="btn-secondary">Close</button>
-        </div>
-
-        <p class="profile-modal-subtitle">Update name and username. Email and registration date are read-only from <strong>mocks_users</strong>.</p>
-
-        <form id="profile-form" class="profile-form" autocomplete="off">
-          <label for="profile-name-input" class="profile-label">Display Name</label>
-          <input id="profile-name-input" class="profile-input" type="text" maxlength="80" placeholder="Enter your full name" required />
-
-          <label for="profile-email-input" class="profile-label">Email</label>
-          <input id="profile-email-input" class="profile-input" type="email" maxlength="120" placeholder="Enter your email" readonly required />
-
-          <label for="profile-username-input" class="profile-label">Username</label>
-          <input id="profile-username-input" class="profile-input" type="text" maxlength="80" placeholder="Enter username" required />
-
-          <label for="profile-registered-on" class="profile-label">Registered On</label>
-          <input id="profile-registered-on" class="profile-input" type="text" value="-" readonly />
-
-          <div id="profile-form-msg" class="profile-form-msg" aria-live="polite"></div>
-
-          <div class="profile-actions">
-            <button type="button" id="profile-cancel" class="btn-secondary">Cancel</button>
-            <button type="submit" id="profile-save" class="btn-primary">Save Profile</button>
+      <div id="profile-modal" class="profile-modal" aria-hidden="true">
+        <div
+          class="profile-modal-shell"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="profile-modal-title"
+        >
+          <div class="profile-modal-head">
+            <h2 id="profile-modal-title">Profile Settings</h2>
+            <button
+              type="button"
+              id="profile-modal-close"
+              class="btn-secondary"
+            >
+              Close
+            </button>
           </div>
-        </form>
+
+          <p class="profile-modal-subtitle">
+            Update name and username. Email and registration date are read-only
+            from <strong>mocks_users</strong>.
+          </p>
+
+          <form id="profile-form" class="profile-form" autocomplete="off">
+            <label for="profile-name-input" class="profile-label"
+              >Display Name</label
+            >
+            <input
+              id="profile-name-input"
+              class="profile-input"
+              type="text"
+              maxlength="80"
+              placeholder="Enter your full name"
+              required
+            />
+
+            <label for="profile-email-input" class="profile-label">Email</label>
+            <input
+              id="profile-email-input"
+              class="profile-input"
+              type="email"
+              maxlength="120"
+              placeholder="Enter your email"
+              readonly
+              required
+            />
+
+            <label for="profile-username-input" class="profile-label"
+              >Username</label
+            >
+            <input
+              id="profile-username-input"
+              class="profile-input"
+              type="text"
+              maxlength="80"
+              placeholder="Enter username"
+              required
+            />
+
+            <label for="profile-registered-on" class="profile-label"
+              >Registered On</label
+            >
+            <input
+              id="profile-registered-on"
+              class="profile-input"
+              type="text"
+              value="-"
+              readonly
+            />
+
+            <div
+              id="profile-form-msg"
+              class="profile-form-msg"
+              aria-live="polite"
+            ></div>
+
+            <div class="profile-actions">
+              <button type="button" id="profile-cancel" class="btn-secondary">
+                Cancel
+              </button>
+              <button type="submit" id="profile-save" class="btn-primary">
+                Save Profile
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
 
       <!-- LOGIN PAGE FOOTER -->
       <footer class="login-footer">
@@ -861,7 +1085,6 @@
         </div>
       </div>
     </div>
-    
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
