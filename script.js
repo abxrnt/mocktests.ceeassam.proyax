@@ -9,6 +9,9 @@ const firebaseConfig = {
         firebase.initializeApp(firebaseConfig);
         auth = firebase.auth();
         db = firebase.firestore();
+        auth
+          .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+          .catch((e) => console.warn("auth persistence setup failed", e));
       } catch (e) {
         db = null;
         auth = null;
@@ -23,6 +26,7 @@ const firebaseConfig = {
       const loginBtn = document.getElementById("login-btn");
       const loginError = document.getElementById("login-error");
       const loginGrid = document.querySelector(".px-login-grid");
+      const loginCountdownCard = document.querySelector(".login-countdown-card");
       const loginFormPane = document.getElementById("login-form");
       const loginFeaturesPane = document.querySelector(".login-features");
       const loadingOverlay = document.getElementById("loading-overlay");
@@ -33,6 +37,7 @@ const firebaseConfig = {
       const postLoginMocksBtn = document.getElementById("post-login-mocks");
       const postLoginResultsBtn = document.getElementById("post-login-results");
       const postLoginProfileBtn = document.getElementById("post-login-profile");
+      const postLoginPyqsBtn = document.getElementById("post-login-pyqs");
       const postLoginLogoutBtn = document.getElementById("post-login-logout");
 
       const profileModal = document.getElementById("profile-modal");
@@ -96,6 +101,63 @@ const firebaseConfig = {
         loadingOverlay.classList.remove("is-active");
         loadingOverlay.style.display = "none";
         loadingOverlay.setAttribute("aria-hidden", "true");
+      }
+
+      let loginStatsAnimated = false;
+      function animateLoginCounter(el, target, durationMs) {
+        if (!el) return;
+        const safeTarget = Number(target) || 0;
+        const safeDuration = Math.max(500, Number(durationMs) || 1500);
+        const startValue = 0;
+        const startTime = performance.now();
+        const formatCount = (n) => n.toLocaleString("en-IN");
+
+        function step(now) {
+          const progress = Math.min(1, (now - startTime) / safeDuration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const currentValue = Math.floor(
+            startValue + (safeTarget - startValue) * eased,
+          );
+          el.textContent = formatCount(currentValue);
+          if (progress < 1) requestAnimationFrame(step);
+          else el.textContent = formatCount(safeTarget);
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      function initLoginStatsCounters() {
+        if (loginStatsAnimated) return;
+        const statNodes = document.querySelectorAll("[data-counter-target]");
+        if (!statNodes.length) return;
+        loginStatsAnimated = true;
+        statNodes.forEach((node, idx) => {
+          const target = Number(node.getAttribute("data-counter-target"));
+          animateLoginCounter(node, target, 1300 + idx * 250);
+        });
+      }
+
+      function getCeeDaysLeft() {
+        const now = new Date();
+        const todayUtcMs = Date.UTC(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+        );
+        const targetUtcMs = Date.UTC(2026, 5, 7); // June is 5 (0-indexed)
+        const diffMs = targetUtcMs - todayUtcMs;
+        return Math.max(0, Math.ceil(diffMs / 86400000));
+      }
+
+      function initCeeCountdown() {
+        const daysEl = document.getElementById("cee-days-left");
+        if (!daysEl) return;
+
+        daysEl.textContent = getCeeDaysLeft().toLocaleString("en-IN");
+
+        setInterval(() => {
+          daysEl.textContent = getCeeDaysLeft().toLocaleString("en-IN");
+        }, 60 * 60 * 1000);
       }
 
       // Legal Modal (Terms & Conditions & Privacy Policy)
@@ -379,6 +441,12 @@ const firebaseConfig = {
       const historyOverlay = document.getElementById("history-overlay");
       const historyGrid = document.getElementById("history-grid");
       const closeHistory = document.getElementById("close-history");
+      const pyqsOverlay = document.getElementById("pyqs-overlay");
+      const pyqsGrid = document.getElementById("pyqs-grid");
+      const pyqImageModal = document.getElementById("pyq-image-modal");
+      const pyqImagePreview = document.getElementById("pyq-image-preview");
+      const pyqImageEmpty = document.getElementById("pyq-image-empty");
+      const pyqImageClose = document.getElementById("pyq-image-close");
 
       const detailOverlay = document.getElementById("detail-overlay");
       const closeDetail = document.getElementById("close-detail");
@@ -475,6 +543,60 @@ const firebaseConfig = {
         if (l === "C") return 2;
         if (l === "D") return 3;
         return null;
+      }
+
+      function parseTruthyFlag(value) {
+        if (value === true || value === 1) return true;
+        const normalized = String(value == null ? "" : value)
+          .trim()
+          .toLowerCase();
+        return ["true", "1", "yes", "y"].includes(normalized);
+      }
+
+      async function getPyqsAccessFromMocksUsers(emailCandidates) {
+        if (!db || !Array.isArray(emailCandidates) || !emailCandidates.length) {
+          return false;
+        }
+        try {
+          for (const candidateEmail of emailCandidates) {
+            const snap = await db
+              .collection("mocks_users")
+              .where("email", "==", candidateEmail)
+              .limit(1)
+              .get()
+              .catch(() => null);
+            if (snap && !snap.empty) {
+              const row = snap.docs[0].data() || {};
+              return parseTruthyFlag(row.pyqs);
+            }
+          }
+
+          const normalizedCandidates = emailCandidates.map((v) =>
+            String(v || "")
+              .trim()
+              .toLowerCase(),
+          );
+          const fallback = await db
+            .collection("mocks_users")
+            .limit(500)
+            .get()
+            .catch(() => null);
+          if (fallback && !fallback.empty) {
+            const found = fallback.docs.find((d) => {
+              const de = String((d.data() && d.data().email) || "")
+                .trim()
+                .toLowerCase();
+              return normalizedCandidates.includes(de);
+            });
+            if (found) {
+              const row = found.data() || {};
+              return parseTruthyFlag(row.pyqs);
+            }
+          }
+        } catch (e) {
+          console.warn("pyqs access lookup failed", e);
+        }
+        return false;
       }
 
       function normalizeImgUrl(u) {
@@ -630,6 +752,8 @@ const firebaseConfig = {
         if (loginScreen)
           loginScreen.classList.toggle("post-login-active", !!showWelcomeCards);
         if (loginGrid) loginGrid.style.display = "grid";
+        if (loginCountdownCard)
+          loginCountdownCard.style.display = showWelcomeCards ? "none" : "";
         if (loginFormPane)
           loginFormPane.style.display = showWelcomeCards ? "none" : "";
         if (loginFeaturesPane)
@@ -652,13 +776,16 @@ const firebaseConfig = {
           if (startModal) startModal.style.display = "flex";
         }
         if (fromPane === "results") openResultsWindow();
+        if (fromPane === "pyqs") openPyqsWindow();
       }
 
       function returnToHomeView() {
         if (startModal) startModal.style.display = "none";
         if (historyOverlay) historyOverlay.style.display = "none";
+        if (pyqsOverlay) pyqsOverlay.style.display = "none";
         if (detailOverlay) detailOverlay.style.display = "none";
         closeQuestionImageModal();
+        closePyqImageModal();
         appEl.setAttribute("aria-hidden", "true");
         loginScreen.style.display = "flex";
         setLoginMiddleMode(!!currentUser);
@@ -706,6 +833,14 @@ const firebaseConfig = {
               p,
             );
             const user = userCredential.user;
+            const loginEmail = String((user && user.email) || email || "").trim();
+            const emailCandidates = [
+              ...new Set(
+                [loginEmail, loginEmail.toLowerCase(), email, email.toLowerCase()]
+                  .map((v) => String(v || "").trim())
+                  .filter(Boolean),
+              ),
+            ];
 
             // fetch extra profile data from Firestore if available
             let data = {};
@@ -713,21 +848,6 @@ const firebaseConfig = {
             let foundMatchingUserDoc = false;
             if (db) {
               // lookup profile/subscription in mock_admins + mocks_users by logged-in email
-              const loginEmail = String(
-                (user && user.email) || email || "",
-              ).trim();
-              const emailCandidates = [
-                ...new Set(
-                  [
-                    loginEmail,
-                    loginEmail.toLowerCase(),
-                    email,
-                    email.toLowerCase(),
-                  ]
-                    .map((v) => String(v || "").trim())
-                    .filter(Boolean),
-                ),
-              ];
               const mockUserCollections = ["mock_admins", "mocks_users"];
               for (const coll of mockUserCollections) {
                 for (const candidateEmail of emailCandidates) {
@@ -804,6 +924,7 @@ const firebaseConfig = {
               )
                 .trim()
                 .toLowerCase(),
+              pyqsEnabled: await getPyqsAccessFromMocksUsers(emailCandidates),
             };
 
             // ✅ apply logo / branding based on subscription
@@ -818,7 +939,124 @@ const firebaseConfig = {
           }
         });
 
+      async function restoreCurrentUserFromAuth(authUser) {
+        if (!authUser) return null;
+
+        const email = String((authUser && authUser.email) || "").trim();
+        const emailCandidates = [
+          ...new Set(
+            [email, email.toLowerCase()]
+              .map((v) => String(v || "").trim())
+              .filter(Boolean),
+          ),
+        ];
+        let data = {};
+        let mockUsersData = {};
+        let foundMatchingUserDoc = false;
+
+        if (db) {
+          const mockUserCollections = ["mock_admins", "mocks_users"];
+          for (const coll of mockUserCollections) {
+            for (const candidateEmail of emailCandidates) {
+              const mockUsersSnap = await db
+                .collection(coll)
+                .where("email", "==", candidateEmail)
+                .limit(1)
+                .get()
+                .catch(() => null);
+              if (mockUsersSnap && !mockUsersSnap.empty) {
+                mockUsersData = mockUsersSnap.docs[0].data() || {};
+                foundMatchingUserDoc = true;
+                break;
+              }
+            }
+            if (foundMatchingUserDoc) break;
+          }
+
+          if (!foundMatchingUserDoc) {
+            const fallbackSnap = await db
+              .collection("users")
+              .doc(authUser.uid)
+              .get()
+              .catch(() => null);
+            if (fallbackSnap && fallbackSnap.exists) {
+              data = fallbackSnap.data() || {};
+            } else if (email) {
+              const byEmail = await db
+                .collection("users")
+                .where("email", "==", email)
+                .limit(1)
+                .get()
+                .catch(() => null);
+              if (byEmail && !byEmail.empty) {
+                data = byEmail.docs[0].data() || {};
+              }
+            }
+          } else {
+            const userDoc = await db
+              .collection("users")
+              .doc(authUser.uid)
+              .get()
+              .catch(() => null);
+            if (userDoc && userDoc.exists) {
+              data = userDoc.data() || {};
+            }
+          }
+        }
+
+        const fullName = String(mockUsersData.name || data.name || "").trim();
+        return {
+          username: String(
+            mockUsersData.username || data.username || email || "",
+          ).trim(),
+          email,
+          name: fullName || "User",
+          subscription: String(
+            mockUsersData.subscription || data.subscription || "",
+          )
+            .trim()
+            .toLowerCase(),
+          pyqsEnabled: await getPyqsAccessFromMocksUsers(emailCandidates),
+        };
+      }
+
+      if (auth && typeof auth.onAuthStateChanged === "function") {
+        auth.onAuthStateChanged(async (user) => {
+          if (!user || currentUser) return;
+          if (loginError) loginError.textContent = "";
+          showLoadingOverlay("Restoring session");
+          try {
+            const restoredUser = await restoreCurrentUserFromAuth(user);
+            if (!restoredUser) return;
+            currentUser = restoredUser;
+            applySubscriptionBranding(currentUser.subscription);
+            onLoggedIn();
+          } catch (e) {
+            console.warn("session restore failed", e);
+          } finally {
+            hideLoadingOverlay();
+          }
+        });
+      }
+
       function onLoggedIn() {
+        const hasPyqsAccess = !!(currentUser && currentUser.pyqsEnabled);
+        if (postLoginPyqsBtn) {
+          postLoginPyqsBtn.classList.toggle("pyqs-locked", !hasPyqsAccess);
+          postLoginPyqsBtn.disabled = !hasPyqsAccess;
+          postLoginPyqsBtn.setAttribute(
+            "aria-disabled",
+            !hasPyqsAccess ? "true" : "false",
+          );
+          if (!hasPyqsAccess) {
+            postLoginPyqsBtn.setAttribute("data-mrp", "MRP 199/-");
+            postLoginPyqsBtn.title = "Unlock PYQs access";
+          } else {
+            postLoginPyqsBtn.removeAttribute("data-mrp");
+            postLoginPyqsBtn.removeAttribute("title");
+          }
+        }
+
         // show attractive badge
         userNameEl.textContent =
           currentUser.name || currentUser.username || "User";
@@ -853,6 +1091,16 @@ const firebaseConfig = {
         postLoginProfileBtn.addEventListener("click", openProfileModal);
       }
 
+      if (postLoginPyqsBtn) {
+        postLoginPyqsBtn.addEventListener("click", () => {
+          if (!(currentUser && currentUser.pyqsEnabled)) {
+            alert("PYQs is locked for your account. Contact admin. MRP 199/-");
+            return;
+          }
+          enterMainApp("pyqs");
+        });
+      }
+
       if (profileModalCloseBtn) {
         profileModalCloseBtn.addEventListener("click", closeProfileModal);
       }
@@ -868,6 +1116,14 @@ const firebaseConfig = {
       }
 
       document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && pyqImageModal && pyqImageModal.style.display === "flex") {
+          closePyqImageModal();
+          return;
+        }
+        if (e.key === "Escape" && pyqsOverlay && pyqsOverlay.style.display === "flex") {
+          returnToHomeView();
+          return;
+        }
         if (e.key === "Escape" && profileModal && profileModal.style.display === "flex") {
           closeProfileModal();
           return;
@@ -2941,6 +3197,247 @@ const firebaseConfig = {
         questionImageModal.addEventListener("mouseleave", closeQuestionImageModal);
       }
 
+      function openPyqImageModal(imageUrl, labelText) {
+        if (!pyqImageModal || !pyqImagePreview || !pyqImageEmpty) return;
+        const safeUrl = String(imageUrl || "").trim();
+        pyqImageModal.style.display = "flex";
+        pyqImageModal.setAttribute("aria-hidden", "false");
+        if (safeUrl) {
+          pyqImagePreview.src = safeUrl;
+          pyqImagePreview.alt = labelText ? `PYQ - ${labelText}` : "PYQ preview";
+          pyqImagePreview.style.display = "block";
+          pyqImageEmpty.style.display = "none";
+        } else {
+          pyqImagePreview.removeAttribute("src");
+          pyqImagePreview.style.display = "none";
+          pyqImageEmpty.style.display = "block";
+        }
+      }
+
+      function closePyqImageModal() {
+        if (!pyqImageModal || !pyqImagePreview || !pyqImageEmpty) return;
+        pyqImageModal.style.display = "none";
+        pyqImageModal.setAttribute("aria-hidden", "true");
+        pyqImagePreview.removeAttribute("src");
+        pyqImagePreview.style.display = "none";
+        pyqImageEmpty.style.display = "none";
+      }
+
+      if (pyqImageClose) {
+        pyqImageClose.addEventListener("click", closePyqImageModal);
+      }
+      if (pyqImageModal) {
+        pyqImageModal.addEventListener("click", (e) => {
+          if (e.target === pyqImageModal) closePyqImageModal();
+        });
+      }
+
+      async function startPyqChapterMock(chapterName, chapterDocs) {
+        const rows = Array.isArray(chapterDocs) ? chapterDocs : [];
+        if (!rows.length) {
+          alert("No questions found in this chapter.");
+          return;
+        }
+
+        showLoadingOverlay("Starting chapter mock");
+        try {
+          const normalizeSection = (v) => {
+            const raw = String(v || "").trim().toLowerCase();
+            if (raw === "physics") return "Physics";
+            if (raw === "chemistry") return "Chemistry";
+            if (raw === "mathematics" || raw === "maths" || raw === "math") return "Mathematics";
+            return "Chemistry";
+          };
+
+          const built = rows.map((item, idx) => {
+            const d = (item && item.data) || {};
+            return {
+              id: String(d.qid || item.id || `PYQ-${idx + 1}`),
+              section: normalizeSection(d.subject),
+              text: String(d.question || d.text || "").trim() || null,
+              img: findImageFromDoc(d),
+              options: ["A", "B", "C", "D"],
+              answerIndex: letterToIndex(d.correct || d.ans || d.answer),
+            };
+          });
+
+          questions = built.map((q, i) => ({
+            id: q.id || `Q${i + 1}`,
+            section: q.section,
+            text: q.text,
+            img: normalizeImgUrl(q.img),
+            options: q.options || ["A", "B", "C", "D"],
+            answerIndex: q.answerIndex,
+          }));
+
+          sectionMap = {};
+          questions.forEach((q, i) => {
+            if (!sectionMap[q.section]) sectionMap[q.section] = [];
+            sectionMap[q.section].push(i);
+          });
+
+          responses = questions.map(() => ({
+            choiceIndex: null,
+            markedReview: false,
+            timeSpentSec: 0,
+            viewed: false,
+          }));
+
+          questionTimers = questions.map(() => null);
+          current = 0;
+
+          const durationMin = rows.length * 1.5;
+          totalDurationSec = Math.max(60, Math.round(durationMin * 60));
+
+          startTime = Date.now();
+          testStarted = true;
+          submittedAlready = false;
+
+          const statusDot = document.getElementById("status-dot");
+          if (statusDot) statusDot.style.display = "inline-block";
+
+          startGlobalTimer();
+          const firstSection = updateSectionTabs();
+          if (firstSection) setActiveSection(firstSection);
+
+          currentMockId = `pyq-${String(chapterName || "chapter").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+          currentMockName = `PYQ - ${String(chapterName || "Chapter").trim()}`;
+          updateHeaderMockTitle();
+
+          if (pyqsOverlay) pyqsOverlay.style.display = "none";
+          loginScreen.style.display = "none";
+          appEl.setAttribute("aria-hidden", "false");
+          requestAppFullscreen();
+        } finally {
+          hideLoadingOverlay();
+        }
+      }
+
+      async function openPyqsWindow() {
+        showLoadingOverlay("Loading PYQs");
+        try {
+          if (!(currentUser && currentUser.pyqsEnabled)) {
+            alert("PYQs is locked for your account. Contact admin. MRP 199/-");
+            returnToHomeView();
+            return;
+          }
+          closePyqImageModal();
+          if (pyqsOverlay) pyqsOverlay.style.display = "flex";
+          if (historyOverlay) historyOverlay.style.display = "none";
+          if (detailOverlay) detailOverlay.style.display = "none";
+          if (!pyqsGrid) return;
+          pyqsGrid.innerHTML = "";
+
+          if (!db) {
+            pyqsGrid.innerHTML =
+              '<div class="result-history-card"><div class="result-row-1"><i data-lucide="database-zap"></i><h4 class="result-history-title">PYQs unavailable</h4></div><div class="result-row-2"><span class="result-meta-item"><i data-lucide="info"></i> DB not configured.</span></div></div>';
+            if (window.lucide && typeof window.lucide.createIcons === "function") window.lucide.createIcons();
+            return;
+          }
+
+          const snap = await db.collection("pyqs").get().catch(() => ({ docs: [] }));
+          const docs = snap && Array.isArray(snap.docs) ? snap.docs : [];
+          if (!docs.length) {
+            pyqsGrid.innerHTML =
+              '<div class="result-history-card"><div class="result-row-1"><i data-lucide="inbox"></i><h4 class="result-history-title">No PYQs found</h4></div><div class="result-row-2"><span class="result-meta-item"><i data-lucide="info"></i> Collection <strong>pyqs</strong> is empty.</span></div></div>';
+            if (window.lucide && typeof window.lucide.createIcons === "function") window.lucide.createIcons();
+            return;
+          }
+
+          const chapterMap = {};
+          docs.forEach((doc) => {
+            const d = doc.data() || {};
+            const chapterName = String(d.chapter || "").trim() || "Uncategorized";
+            if (!chapterMap[chapterName]) chapterMap[chapterName] = [];
+            chapterMap[chapterName].push({
+              id: doc.id,
+              chapter: chapterName,
+              data: d,
+              imageUrl: findImageFromDoc(d),
+            });
+          });
+
+          const chapterNames = Object.keys(chapterMap).sort((a, b) =>
+            a.localeCompare(b, "en", { sensitivity: "base" }),
+          );
+
+          chapterNames.forEach((chapterName) => {
+            const groupEl = document.createElement("section");
+            groupEl.className = "pyq-chapter-group";
+
+            const headEl = document.createElement("div");
+            headEl.className = "pyq-group-head";
+
+            const homeBtn = document.createElement("button");
+            homeBtn.type = "button";
+            homeBtn.className = "pyq-home-btn";
+            homeBtn.setAttribute("aria-label", "Go to home");
+            homeBtn.innerHTML = '<i data-lucide="house"></i>';
+            homeBtn.addEventListener("click", () => returnToHomeView());
+            headEl.appendChild(homeBtn);
+
+            const startBtn = document.createElement("button");
+            startBtn.type = "button";
+            startBtn.className = "pyq-start-btn";
+            startBtn.innerHTML = '<i data-lucide="play-circle"></i><span>Start</span>';
+            startBtn.addEventListener("click", () => {
+              startPyqChapterMock(chapterName, chapterMap[chapterName]);
+            });
+
+            const titleEl = document.createElement("h4");
+            titleEl.className = "pyq-group-title";
+            titleEl.textContent = chapterName;
+            headEl.appendChild(titleEl);
+            headEl.appendChild(startBtn);
+            groupEl.appendChild(headEl);
+
+            const gridEl = document.createElement("div");
+            gridEl.className = "pyq-chapter-grid";
+
+            chapterMap[chapterName].forEach((item, idx) => {
+              const card = document.createElement("div");
+              card.className = "pyq-card";
+              const label = `${chapterName} - Q${idx + 1}`;
+              card.innerHTML = `
+                <button class="pyq-view-btn" type="button" aria-label="View question image">
+                  <i data-lucide="expand"></i>
+                </button>
+                <div class="pyq-image-wrap">
+                  ${
+                    item.imageUrl
+                      ? `<img class="pyq-image" src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(label)}" loading="lazy" />`
+                      : `<div class="pyq-image-empty">No image</div>`
+                  }
+                </div>
+              `;
+              const viewBtn = card.querySelector(".pyq-view-btn");
+              if (viewBtn) {
+                viewBtn.addEventListener("click", () => {
+                  openPyqImageModal(item.imageUrl, label);
+                });
+              }
+              gridEl.appendChild(card);
+            });
+
+            groupEl.appendChild(gridEl);
+            pyqsGrid.appendChild(groupEl);
+          });
+
+          if (window.lucide && typeof window.lucide.createIcons === "function") {
+            window.lucide.createIcons();
+          }
+        } catch (e) {
+          console.error(e);
+          if (pyqsGrid) {
+            pyqsGrid.innerHTML =
+              '<div class="result-history-card"><div class="result-row-1"><i data-lucide="alert-triangle"></i><h4 class="result-history-title">Load failed</h4></div><div class="result-row-2"><span class="result-meta-item"><i data-lucide="info"></i> Failed to load PYQs from collection.</span></div></div>';
+            if (window.lucide && typeof window.lucide.createIcons === "function") window.lucide.createIcons();
+          }
+        } finally {
+          hideLoadingOverlay();
+        }
+      }
+
       async function openResultsWindow() {
         showLoadingOverlay("Loading results");
         try {
@@ -3056,6 +3553,8 @@ const firebaseConfig = {
       current = 0;
       renderQuestion();
       renderPicker("Physics");
+      initLoginStatsCounters();
+      initCeeCountdown();
 
       (async () => {
         if (db) await loadMocks();
