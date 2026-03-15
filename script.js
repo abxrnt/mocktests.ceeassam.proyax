@@ -58,6 +58,20 @@ const firebaseConfig = {
       const qstatus = document.getElementById("qstatus");
       const globalTimer = document.getElementById("global-timer");
       const timerRingFill = document.getElementById("timer-ring-fill");
+      const headerTimerWrap = document.getElementById("header-timer-wrap");
+      const mobileHeaderUser = document.getElementById("mobile-header-user");
+      const subjectSeg = document.getElementById("subject-seg");
+      const mobileUserSlot = document.getElementById("mobile-user-slot");
+      const mobileTimerSlot = document.getElementById("mobile-timer-slot");
+      const mobileSubjectSlot = document.getElementById("mobile-subject-slot");
+      const mobileQnoSlot = document.getElementById("mobile-qno-slot");
+
+      const layoutState = {
+        userBadgeParent: null,
+        timerParent: null,
+        subjectParent: null,
+        qnoParent: null,
+      };
 
       // user badge DOM refs (new)
       const userBadge = document.getElementById("user-badge");
@@ -77,6 +91,49 @@ const firebaseConfig = {
 
       const sideControlsEl = document.getElementById("side-controls");
       const liveSummaryEl = document.getElementById("live-summary");
+
+      function applyMobileLayout() {
+        const isMobile = window.matchMedia("(max-width: 900px)").matches;
+        if (!userBadge || !headerTimerWrap || !subjectSeg || !qno) return;
+        if (!mobileUserSlot || !mobileTimerSlot || !mobileSubjectSlot || !mobileQnoSlot || !mobileHeaderUser) return;
+
+        if (!layoutState.userBadgeParent) {
+          layoutState.userBadgeParent = userBadge.parentElement;
+          layoutState.timerParent = headerTimerWrap.parentElement;
+          layoutState.subjectParent = subjectSeg.parentElement;
+          layoutState.qnoParent = qno.parentElement;
+        }
+
+        if (isMobile) {
+          if (userBadge.parentElement !== mobileHeaderUser) {
+            mobileHeaderUser.appendChild(userBadge);
+          }
+          if (headerTimerWrap.parentElement !== mobileTimerSlot) {
+            mobileTimerSlot.appendChild(headerTimerWrap);
+          }
+          if (subjectSeg.parentElement !== mobileSubjectSlot) {
+            mobileSubjectSlot.appendChild(subjectSeg);
+          }
+          if (qno.parentElement !== mobileQnoSlot) {
+            mobileQnoSlot.appendChild(qno);
+          }
+        } else {
+          if (layoutState.userBadgeParent && userBadge.parentElement !== layoutState.userBadgeParent) {
+            layoutState.userBadgeParent.appendChild(userBadge);
+          }
+          if (layoutState.timerParent && headerTimerWrap.parentElement !== layoutState.timerParent) {
+            layoutState.timerParent.appendChild(headerTimerWrap);
+          }
+          if (layoutState.subjectParent && subjectSeg.parentElement !== layoutState.subjectParent) {
+            layoutState.subjectParent.appendChild(subjectSeg);
+          }
+          if (layoutState.qnoParent && qno.parentElement !== layoutState.qnoParent) {
+            layoutState.qnoParent.appendChild(qno);
+          }
+        }
+      }
+
+      window.addEventListener("resize", applyMobileLayout);
 
       function showLoadingOverlay(baseText = "Loading") {
         if (!loadingOverlay) return;
@@ -1964,7 +2021,9 @@ const firebaseConfig = {
 
       function renderPicker(section) {
         const picker = document.getElementById("section-picker");
+        const mobileRow = document.getElementById("mobile-question-row");
         picker.innerHTML = "";
+        if (mobileRow) mobileRow.innerHTML = "";
         const list =
           sectionMap && sectionMap[section] ? sectionMap[section] : [];
         for (let i = 0; i < list.length; i++) {
@@ -1981,22 +2040,27 @@ const firebaseConfig = {
           else if (st.choiceIndex !== null) cls += " answered";
           else if (st.viewed) cls += " viewed";
 
-          const el = document.createElement("div");
-          el.className = cls;
-          el.textContent = i + 1;
-          el.title = `Q ${i + 1}`;
-          el.addEventListener("click", () => {
-            // stop time for previous
-            if (testStarted) recordQuestionTimeStop(current);
-            // set current and mark viewed immediately so UI shows ribbon even before renderQuestion sets it
-            current = idx;
-            if (responses[current]) responses[current].viewed = true;
-            renderQuestion();
-            renderPicker(section);
-            // resume timer
-            if (testStarted) recordQuestionTimeStart(current);
-          });
-          picker.appendChild(el);
+          const buildBtn = () => {
+            const el = document.createElement("div");
+            el.className = cls + (idx === current ? " current" : "");
+            el.textContent = i + 1;
+            el.title = `Q ${i + 1}`;
+            el.addEventListener("click", () => {
+              // stop time for previous
+              if (testStarted) recordQuestionTimeStop(current);
+              // set current and mark viewed immediately so UI shows ribbon even before renderQuestion sets it
+              current = idx;
+              if (responses[current]) responses[current].viewed = true;
+              renderQuestion();
+              renderPicker(section);
+              // resume timer
+              if (testStarted) recordQuestionTimeStart(current);
+            });
+            return el;
+          };
+
+          picker.appendChild(buildBtn());
+          if (mobileRow) mobileRow.appendChild(buildBtn());
         }
       }
 
@@ -3555,6 +3619,7 @@ const firebaseConfig = {
       renderPicker("Physics");
       initLoginStatsCounters();
       initCeeCountdown();
+      applyMobileLayout();
 
       (async () => {
         if (db) await loadMocks();
