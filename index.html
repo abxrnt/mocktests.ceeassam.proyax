@@ -55,7 +55,8 @@
             <div class="title" id="header-mock-title">CEE Mock Test</div>
             <div class="subtitle">Combined Entrance Examination 2026</div>
           </div>
-          <div class="header-timer-wrap">
+          <div class="mobile-header-user" id="mobile-header-user"></div>
+          <div class="header-timer-wrap" id="header-timer-wrap">
             <div class="timer-block">
               <div class="timer-label">Time Remaining</div>
               <div class="timer" id="global-timer">00:00:00</div>
@@ -78,6 +79,21 @@
               </svg>
             </div>
           </div>
+        </div>
+
+        <!-- MOBILE STACK (user + timer, subject + question no) -->
+        <div class="mobile-stack" id="mobile-stack" aria-hidden="true">
+          <div class="mobile-row">
+            <div class="mobile-user-slot" id="mobile-user-slot"></div>
+          </div>
+          <div class="mobile-row split">
+            <div class="mobile-timer-slot" id="mobile-timer-slot"></div>
+            <div class="mobile-subject-slot" id="mobile-subject-slot"></div>
+          </div>
+          <div class="mobile-row">
+            <div class="mobile-qno-slot" id="mobile-qno-slot"></div>
+          </div>
+          <div class="mobile-qrow" id="mobile-question-row" aria-label="Question numbers"></div>
         </div>
 
         <div class="question-card" id="question-card">
@@ -187,7 +203,7 @@
         </div>
 
         <h3>Choose Section</h3>
-        <div class="seg">
+        <div class="seg" id="subject-seg">
           <button id="btn-phy" class="active">Physics</button>
           <button id="btn-chem">Chemistry</button>
           <button id="btn-math">Mathematics</button>
@@ -571,8 +587,8 @@
         <div class="px-login-top">
           <img id="login-banner" src="/logo.png" alt="PROYAX Logo" />
           <h1>
-            PROYAX - Assam CEE(Combined Entrance Examination) 2026 Mock Test
-            Series
+            PROYAX Mock Tests
+            <span class="px-login-subtitle">CEE Assam 2026</span>
           </h1>
         </div>
         <div class="px-login-center">
