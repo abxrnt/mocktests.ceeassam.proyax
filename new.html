@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Form</title>
+
+  <style>
+    :root {
+      --bg: #e6ebf2;
+      --light: #ffffff;
+      --dark: #c8d0da;
+      --text: #2b2f33;
+      --accent: #4a90e2;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #eef2f7, #d9e0ea);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text);
+    }
+
+    .wrapper { width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+
+    form, .payment-box {
+      width: 100%;
+      max-width: 600px;
+      padding: 40px;
+      border-radius: 20px;
+      background: var(--bg);
+      box-shadow: inset 8px 8px 16px var(--dark), inset -8px -8px 16px var(--light);
+    }
+
+    h2 { text-align: center; margin-bottom: 25px; }
+
+    .form-group { margin-bottom: 18px; }
+
+    label { display: block; margin-bottom: 6px; }
+
+    input, select {
+      width: 100%; padding: 12px; border-radius: 10px; border: none;
+      background: var(--bg);
+      box-shadow: inset 5px 5px 10px var(--dark), inset -5px -5px 10px var(--light);
+      outline: none;
+    }
+
+    .radio-group { display: flex; gap: 15px; flex-wrap: wrap; }
+
+    button {
+      width: 100%; padding: 14px; border-radius: 10px; border: none;
+      background: var(--bg);
+      box-shadow: 6px 6px 12px var(--dark), -6px -6px 12px var(--light);
+      cursor: pointer; font-weight: bold;
+    }
+
+    button:active {
+      box-shadow: inset 6px 6px 12px var(--dark), inset -6px -6px 12px var(--light);
+    }
+
+    .hidden { display: none; }
+
+    .qr {
+      width: 200px;
+      display: block;
+      margin: 20px auto;
+    }
+
+    .timer {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #d9534f;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <form id="form">
+    <h2>User Details</h2>
+
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" required>
+    </div>
+
+    <div class="form-group">
+      <label>Gender</label>
+      <div class="radio-group">
+        <label><input type="radio" name="g" required> Male</label>
+        <label><input type="radio" name="g"> Female</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Category</label>
+      <select required>
+        <option value="">Select</option>
+        <option>General</option><option>OBC</option><option>MOBC</option>
+        <option>SC</option><option>ST</option><option>EWS</option><option>PH</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Status</label>
+      <div class="radio-group">
+        <label><input type="radio" name="s" required> 12th Appearing</label>
+        <label><input type="radio" name="s"> Dropper</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Batch</label>
+      <select id="batch" required>
+        <option value="">Select</option>
+        <option>399</option><option>499</option><option>799</option>
+        <option>999</option><option>1299</option><option>1499</option>
+        <option>1899</option><option>2099</option><option>2399</option><option>2799</option>
+      </select>
+    </div>
+
+    <button type="submit">Proceed to Payment</button>
+  </form>
+
+  <div class="payment-box hidden" id="paymentBox">
+    <h2>Complete Payment</h2>
+    <p style="text-align:center;">Pay Amount: ₹<span id="price"></span></p>
+
+    <img src="qr.png" alt="QR Code" class="qr">
+
+    <div class="timer" id="timer">05:00</div>
+  </div>
+
+</div>
+
+<script>
+  const form = document.getElementById("form");
+  const paymentBox = document.getElementById("paymentBox");
+  const priceText = document.getElementById("price");
+  const batch = document.getElementById("batch");
+  const timerEl = document.getElementById("timer");
+
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const price = batch.value;
+    priceText.textContent = price;
+
+    form.classList.add("hidden");
+    paymentBox.classList.remove("hidden");
+
+    startTimer(300);
+  });
+
+  function startTimer(seconds) {
+    let time = seconds;
+
+    const interval = setInterval(() => {
+      let min = Math.floor(time / 60);
+      let sec = time % 60;
+
+      sec = sec < 10 ? "0" + sec : sec;
+      timerEl.textContent = `${min}:${sec}`;
+
+      if (time <= 0) {
+        clearInterval(interval);
+        timerEl.textContent = "Time Expired";
+      }
+
+      time--;
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>
